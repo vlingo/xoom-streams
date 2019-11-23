@@ -22,6 +22,11 @@
             <version>${vlingo.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.vlingo</groupId>
+            <artifactId>vlingo-http</artifactId>
+            <version>${vlingo.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${jupiter.version}</version>
