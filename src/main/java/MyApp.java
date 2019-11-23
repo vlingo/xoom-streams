@@ -9,7 +9,7 @@ public class MyApp {
         streams.from(CollectionSource.fromArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
                 .map(e -> e * 5)
                 .filter(e -> (e % 2) == 0)
-                .to(PrintSink.stdout("ps1> "), PrintSink.stdout("ps2> "));
+                .to(PrintSink.stdout("ps1> "));
 
         Thread.sleep(1000);
         streams.close();

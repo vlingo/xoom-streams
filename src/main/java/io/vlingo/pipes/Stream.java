@@ -17,14 +17,13 @@ public class Stream<B, E> implements Closeable {
     private Stage stage;
     private Source<B> source;
     private List<Operator<?, ?>> operators;
-    private List<Sink<E>> sinks;
+    private Sink<E> sink;
     private List<Stoppable> stoppables;
 
     private Stream(Stage stage, Source<B> source) {
         this.stage = stage;
         this.operators = new ArrayList<>(8);
         this.source = source;
-        this.sinks = null;
         this.stoppables = new LinkedList<>();
     }
 
@@ -44,12 +43,8 @@ public class Stream<B, E> implements Closeable {
         return this;
     }
 
-    public Closeable to(Sink<E> ...sinks) {
-        return to(Arrays.asList(sinks));
-    }
-
-    public Closeable to(List<Sink<E>> sinks) {
-        this.sinks = sinks;
+    public Closeable to(Sink<E> sink) {
+        this.sink = sink;
 
         var operatorSource = source.materialize(stage, null);
         this.stoppables.add(operatorSource);
@@ -58,11 +53,8 @@ public class Stream<B, E> implements Closeable {
             this.stoppables.add(operatorSource);
         }
 
-        MaterializedSource finalSource = operatorSource.asSource().await();
-        for (var sink : this.sinks) {
-            var stoppable = sink.materialize(stage, finalSource);
-            this.stoppables.add(stoppable);
-        }
+        var stoppable = sink.materialize(stage, operatorSource.asSource().await());
+        this.stoppables.add(stoppable);
 
         return this;
     }
