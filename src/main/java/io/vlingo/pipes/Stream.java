@@ -2,12 +2,14 @@ package io.vlingo.pipes;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.Stoppable;
-import io.vlingo.pipes.actor.MaterializedSource;
 import io.vlingo.pipes.operator.Filter;
 import io.vlingo.pipes.operator.Map;
 
 import java.io.Closeable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
