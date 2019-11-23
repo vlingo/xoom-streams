@@ -4,17 +4,18 @@ import io.vlingo.actors.Actor;
 import io.vlingo.common.Cancellable;
 import io.vlingo.common.Completes;
 import io.vlingo.common.Scheduled;
+import io.vlingo.pipes.Record;
 import io.vlingo.pipes.Sink;
 
 import java.util.stream.Stream;
 
 public class MaterializedSinkActor extends Actor implements Materialized, Scheduled<Void> {
     private final MaterializedSource source;
-    private final Sink<Object> sink;
+    private final Sink<Record> sink;
     private final int pollingInterval;
     private final Cancellable cancellable;
 
-    public MaterializedSinkActor(MaterializedSource source, Sink<Object> sink, int pollingInterval) {
+    public MaterializedSinkActor(MaterializedSource source, Sink<Record> sink, int pollingInterval) {
         this.source = source;
         this.sink = sink;
         this.pollingInterval = pollingInterval;
@@ -37,7 +38,7 @@ public class MaterializedSinkActor extends Actor implements Materialized, Schedu
         return completes().with(null);
     }
 
-    private void whenValueForEach(Object[] e) {
+    private void whenValueForEach(Record[] e) {
         Stream.of(e).forEach(sink::whenValue);
     }
 }

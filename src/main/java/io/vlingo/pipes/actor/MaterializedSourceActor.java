@@ -4,17 +4,18 @@ import io.vlingo.actors.Actor;
 import io.vlingo.common.Cancellable;
 import io.vlingo.common.Completes;
 import io.vlingo.common.Scheduled;
+import io.vlingo.pipes.Record;
 import io.vlingo.pipes.Source;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class MaterializedSourceActor extends Actor implements Scheduled<Void>, MaterializedSource {
     private final Source<Object> source;
     private final int pollingInterval;
-    private final Queue<Object> queue;
+    private final Queue<Record> queue;
     private final Cancellable cancellable;
     private final MaterializedSource selfAsMaterializedSource;
 
@@ -22,7 +23,7 @@ public class MaterializedSourceActor extends Actor implements Scheduled<Void>, M
         this.selfAsMaterializedSource = selfAs(MaterializedSource.class);
         this.source = source;
         this.pollingInterval = pollingInterval;
-        this.queue = new PriorityQueue<>(32);
+        this.queue = new ArrayDeque<>(32);
 
         this.cancellable =
                 scheduler().schedule(selfAs(Scheduled.class), null, 0, pollingInterval);
@@ -34,13 +35,13 @@ public class MaterializedSourceActor extends Actor implements Scheduled<Void>, M
     }
 
     @Override
-    public Completes<Optional<Object[]>> nextIfAny() {
+    public Completes<Optional<Record[]>> nextIfAny() {
         if (queue.isEmpty()) {
             return completes().with(Optional.empty());
         }
 
         int size = queue.size();
-        Object[] res = new Object[size];
+        Record[] res = new Record[size];
         for (var i = 0; i < size; i++) {
             res[i] = queue.poll();
         }

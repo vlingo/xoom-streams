@@ -1,6 +1,7 @@
 package io.vlingo.pipes.sources;
 
 import io.vlingo.actors.Stage;
+import io.vlingo.pipes.Record;
 import io.vlingo.pipes.Source;
 import io.vlingo.pipes.Stream;
 import io.vlingo.pipes.actor.Materialized;
@@ -28,13 +29,14 @@ public class CollectionSource<T> implements Source<T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public CompletableFuture<T[]> poll() {
+    public CompletableFuture<Record<T>[]> poll() {
         if (consumed) {
-            return CompletableFuture.completedFuture((T[]) EMPTY);
+            return CompletableFuture.completedFuture((Record<T>[]) EMPTY);
         }
 
         consumed = true;
-        return CompletableFuture.completedFuture((T[]) elements.toArray());
+        var result = elements.stream().map(Record::of).toArray(Record[]::new);
+        return CompletableFuture.completedFuture((Record<T>[]) result);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.vlingo.pipes;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,10 +10,14 @@ public final class Record<T> {
     private final Map<String, Object> metadata;
     private final T value;
 
-    public Record(UUID correlationId, Map<String, Object> metadata, T value) {
+    private Record(UUID correlationId, Map<String, Object> metadata, T value) {
         this.correlationId = correlationId;
         this.metadata = metadata;
         this.value = value;
+    }
+
+    public static <T> Record<T> of(T value) {
+        return new Record<>(UUID.randomUUID(), new HashMap<>(0), value);
     }
 
     public <N> Record<N> withValue(N newValue) {
@@ -34,5 +39,14 @@ public final class Record<T> {
 
     public T value() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return "Record{" +
+                "correlationId=" + correlationId +
+                ", metadata=" + metadata +
+                ", value=" + value +
+                '}';
     }
 }

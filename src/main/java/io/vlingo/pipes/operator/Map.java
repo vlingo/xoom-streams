@@ -1,31 +1,30 @@
 package io.vlingo.pipes.operator;
 
-import io.vlingo.actors.Stage;
-import io.vlingo.actors.Stoppable;
-import io.vlingo.pipes.actor.MaterializedSource;
+import io.vlingo.pipes.Record;
 
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class Map<A, B> extends BasicOperator<A, B> {
-    private final Queue<B> output;
+    private final Queue<Record<B>> output;
     private final Function<A, B> mapper;
 
-    public Map(Queue<B> output, Function<A, B> mapper) {
+    public Map(Queue<Record<B>> output, Function<A, B> mapper) {
         this.output = output;
         this.mapper = mapper;
     }
 
     @Override
-    public void whenValue(A value) {
-        output.add(mapper.apply(value));
+    public void whenValue(Record<A> value) {
+        B newValue = mapper.apply(value.value());
+        output.add(value.withValue(newValue));
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public CompletableFuture<B[]> poll() {
-        var result = CompletableFuture.completedFuture((B[]) output.toArray());
+    public CompletableFuture<Record<B>[]> poll() {
+        CompletableFuture<Record<B>[]> result = CompletableFuture.completedFuture(output.toArray(Record[]::new));
         output.clear();
 
         return result;

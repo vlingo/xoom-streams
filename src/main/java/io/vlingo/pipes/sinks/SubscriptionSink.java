@@ -1,6 +1,7 @@
 package io.vlingo.pipes.sinks;
 
 import io.vlingo.actors.Stage;
+import io.vlingo.pipes.Record;
 import io.vlingo.pipes.Sink;
 import io.vlingo.pipes.Stream;
 import io.vlingo.pipes.actor.Materialized;
@@ -21,8 +22,8 @@ public class SubscriptionSink<T> implements Sink<T> {
     }
 
     @Override
-    public void whenValue(T value) {
-        subscriber.accept(value);
+    public void whenValue(Record<T> value) {
+        subscriber.accept(value.value());
     }
 
     @Override

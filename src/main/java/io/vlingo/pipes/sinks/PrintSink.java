@@ -1,6 +1,7 @@
 package io.vlingo.pipes.sinks;
 
 import io.vlingo.actors.Stage;
+import io.vlingo.pipes.Record;
 import io.vlingo.pipes.Sink;
 import io.vlingo.pipes.Stream;
 import io.vlingo.pipes.actor.Materialized;
@@ -23,8 +24,8 @@ public class PrintSink<T> implements Sink<T> {
     }
 
     @Override
-    public void whenValue(T value) {
-        printStream.println(prefix + value);
+    public void whenValue(Record<T> value) {
+        printStream.println(prefix + value.toString());
     }
 
     @Override

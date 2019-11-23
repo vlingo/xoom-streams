@@ -6,10 +6,10 @@ import io.vlingo.pipes.operator.Filter;
 import io.vlingo.pipes.operator.Map;
 
 import java.io.Closeable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -35,13 +35,13 @@ public class Stream<B, E> implements Closeable {
 
     @SuppressWarnings("unchecked")
     public <X> Stream<B, X> map(Function<E, X> mapper) {
-        this.operators.add(new Map<>(new PriorityQueue<>(32), mapper));
+        this.operators.add(new Map<>(new ArrayDeque<>(32), mapper));
         return (Stream<B, X>) this;
     }
 
     @SuppressWarnings("unchecked")
     public Stream<B, E> filter(Predicate<E> filter) {
-        this.operators.add(new Filter<>(new PriorityQueue<>(32), filter));
+        this.operators.add(new Filter<>(new ArrayDeque<>(32), filter));
         return this;
     }
 

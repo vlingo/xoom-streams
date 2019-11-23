@@ -5,11 +5,9 @@ import io.vlingo.common.Cancellable;
 import io.vlingo.common.Completes;
 import io.vlingo.common.Scheduled;
 import io.vlingo.pipes.Operator;
+import io.vlingo.pipes.Record;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class MaterializedOperatorActor extends Actor implements MaterializedSource, Scheduled<Void> {
@@ -17,7 +15,7 @@ public class MaterializedOperatorActor extends Actor implements MaterializedSour
     private final Operator<Object, Object> operator;
     private final int pollingInterval;
     private final Cancellable cancellable;
-    private final Queue<Object> queue;
+    private final Queue<Record> queue;
     private MaterializedSource selfAsMaterializedSource;
 
     public MaterializedOperatorActor(MaterializedSource previousSource, Operator<Object, Object> operator, int pollingInterval) {
@@ -25,7 +23,7 @@ public class MaterializedOperatorActor extends Actor implements MaterializedSour
         this.previousSource = previousSource;
         this.operator = operator;
         this.pollingInterval = pollingInterval;
-        this.queue = new PriorityQueue<>();
+        this.queue = new ArrayDeque<>();
         this.cancellable = scheduler().schedule(selfAs(Scheduled.class), null, 0, pollingInterval);
     }
 
@@ -37,13 +35,13 @@ public class MaterializedOperatorActor extends Actor implements MaterializedSour
     }
 
     @Override
-    public Completes<Optional<Object[]>> nextIfAny() {
+    public Completes<Optional<Record[]>> nextIfAny() {
         if (queue.isEmpty()) {
             return completes().with(Optional.empty());
         }
 
         int size = queue.size();
-        Object[] res = new Object[size];
+        Record[] res = new Record[size];
         for (var i = 0; i < size; i++) {
             res[i] = queue.poll();
         }
@@ -62,7 +60,7 @@ public class MaterializedOperatorActor extends Actor implements MaterializedSour
         return completes().with(selfAsMaterializedSource);
     }
 
-    private void whenValueForEach(Object[] e) {
+    private void whenValueForEach(Record[] e) {
         Stream.of(e).forEach(operator::whenValue);
     }
 }
