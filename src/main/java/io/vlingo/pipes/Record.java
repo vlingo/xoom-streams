@@ -1,5 +1,7 @@
 package io.vlingo.pipes;
 
+import io.vlingo.common.Tuple2;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +43,14 @@ public final class Record<T> {
         return value;
     }
 
+    public <K> Record<Tuple2<T, K>> mergeLeft(Record<K> k) {
+        UUID correlationId = UUID.randomUUID();
+        k.metadata.forEach((key, value1) -> metadata.merge(key, value1, (ek, ev) -> ev));
+        k.metadata.put("leftCorrelationId", this.correlationId);
+        k.metadata.put("rightCorrelationId", k.correlationId);
+
+        return new Record<>(correlationId, metadata, Tuple2.from(value, k.value));
+    }
     @Override
     public String toString() {
         return "Record{" +

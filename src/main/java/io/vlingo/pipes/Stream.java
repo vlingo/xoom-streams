@@ -2,9 +2,11 @@ package io.vlingo.pipes;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.Stoppable;
+import io.vlingo.common.Tuple2;
 import io.vlingo.pipes.actor.Materialized;
 import io.vlingo.pipes.operator.Filter;
 import io.vlingo.pipes.operator.Map;
+import io.vlingo.pipes.operator.ZipWithSource;
 
 import java.io.Closeable;
 import java.util.ArrayDeque;
@@ -15,7 +17,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Stream<B, E> implements Closeable {
-    public static final int DEFAULT_POLL_INTERVAL = 1;
+    public static final int DEFAULT_POLL_INTERVAL = 5;
 
     private Stage stage;
     private Source<B> source;
@@ -44,6 +46,12 @@ public class Stream<B, E> implements Closeable {
     public Stream<B, E> filter(Predicate<E> filter) {
         this.operators.add(new Filter<>(new ArrayDeque<>(32), filter));
         return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <K> Stream<B, Tuple2<E, K>> zip(Source<K> source) {
+        this.operators.add(new ZipWithSource<>(source, new ArrayDeque<>(32)));
+        return (Stream<B, Tuple2<E, K>>) this;
     }
 
     public Closeable to(Sink<E> sink) {

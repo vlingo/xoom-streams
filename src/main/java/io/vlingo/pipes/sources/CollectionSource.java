@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 public class CollectionSource<T> implements Source<T> {
-    private final static Object[] EMPTY = new Object[0];
+    private final static Record[] EMPTY = new Record[0];
 
     private final Collection<T> elements;
     private boolean consumed;
