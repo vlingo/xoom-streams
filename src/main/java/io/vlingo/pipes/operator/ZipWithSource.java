@@ -51,6 +51,8 @@ public class ZipWithSource<L, R> extends BasicOperator<Tuple2<L, R>, Tuple2<L, R
     }
 
     public static class ZipWithSourceMaterializedActor extends Actor implements MaterializedSource, Scheduled<Void> {
+        private final int MAX_BUFFER = 32;
+
         private final MaterializedSource leftSource;
         private final MaterializedSource rightSource;
         private final Queue<Record> pendingLeft;
@@ -98,11 +100,15 @@ public class ZipWithSource<L, R> extends BasicOperator<Tuple2<L, R>, Tuple2<L, R
 
         @Override
         public void intervalSignal(Scheduled<Void> scheduled, Void data) {
-            Completes<Optional<Record[]>> leftValues = leftSource.nextIfAny();
-            leftValues.andFinallyConsume(opt -> opt.ifPresent(records -> pendingLeft.addAll(Arrays.asList(records))));
+            if (pendingLeft.size() < MAX_BUFFER) {
+                Completes<Optional<Record[]>> leftValues = leftSource.nextIfAny();
+                leftValues.andFinallyConsume(opt -> opt.ifPresent(records -> pendingLeft.addAll(Arrays.asList(records))));
+            }
 
-            Completes<Optional<Record[]>> rightValues = rightSource.nextIfAny();
-            rightValues.andFinallyConsume(opt -> opt.ifPresent(records -> pendingRight.addAll(Arrays.asList(records))));
+            if (pendingRight.size() < MAX_BUFFER) {
+                Completes<Optional<Record[]>> rightValues = rightSource.nextIfAny();
+                rightValues.andFinallyConsume(opt -> opt.ifPresent(records -> pendingRight.addAll(Arrays.asList(records))));
+            }
         }
 
         @Override

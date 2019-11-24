@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class MaterializedOperatorActor extends Actor implements MaterializedSource, Scheduled<Void> {
+    private final int MAX_BUFFER = 32;
+
     private final MaterializedSource previousSource;
     private final Operator<Object, Object> operator;
     private final int pollingInterval;
@@ -23,12 +25,16 @@ public class MaterializedOperatorActor extends Actor implements MaterializedSour
         this.previousSource = previousSource;
         this.operator = operator;
         this.pollingInterval = pollingInterval;
-        this.queue = new ArrayDeque<>();
+        this.queue = new ArrayDeque<>(MAX_BUFFER);
         this.cancellable = scheduler().schedule(selfAs(Scheduled.class), null, 0, pollingInterval);
     }
 
     @Override
     public void intervalSignal(Scheduled<Void> scheduled, Void aVoid) {
+        if (queue.size() >= MAX_BUFFER) {
+            return;
+        }
+
         previousSource.nextIfAny()
                 .andThenConsume((e) -> operator.poll().thenAccept(record -> queue.addAll(Arrays.asList(record))))
                 .andFinallyConsume(e -> e.ifPresent(this::whenValueForEach));
