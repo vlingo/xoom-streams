@@ -21,7 +21,7 @@ public class MyApp {
                 .to(streams.http.responseSink());
 
         streams.from(streams.http.requestSource(Method.GET, "/close"))
-                .map(e -> UUID.randomUUID().toString())
+                .map(e -> "We are closing the streams application.")
                 .zip(SupplierSource.fromSupplier(Instant::now))
                 .map(e -> Response.of(Response.Status.Ok, serialized(e)))
                 .through(streams.http.responseSink())
