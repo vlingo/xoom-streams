@@ -35,8 +35,8 @@ public class CollectionSource<T> implements Source<T> {
         }
 
         consumed = true;
-        var result = elements.stream().map(Record::of).toArray(Record[]::new);
-        return CompletableFuture.completedFuture((Record<T>[]) result);
+        Record<T>[] result = elements.stream().map(Record::of).toArray(Record[]::new);
+        return CompletableFuture.completedFuture(result);
     }
 
     @Override

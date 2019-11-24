@@ -39,7 +39,7 @@ public class HttpStreamServer implements Closeable {
 
     public void start(Stage stage, int port) {
         if (!handlers.isEmpty()) {
-            Resource resource = resource("http-stream", 10, handlers.toArray(RequestHandler[]::new));
+            Resource resource = resource("http-stream", 10, handlers.toArray(new RequestHandler[0]));
             this.server = Server.startWith(stage, Resources.are(resource), port, Configuration.Sizing.define(), Configuration.Timing.define());
         }
     }

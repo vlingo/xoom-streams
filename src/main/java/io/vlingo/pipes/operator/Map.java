@@ -24,7 +24,7 @@ public class Map<A, B> extends BasicOperator<A, B> {
     @Override
     @SuppressWarnings("unchecked")
     public CompletableFuture<Record<B>[]> poll() {
-        CompletableFuture<Record<B>[]> result = CompletableFuture.completedFuture(output.toArray(Record[]::new));
+        CompletableFuture<Record<B>[]> result = CompletableFuture.completedFuture(output.toArray(new Record[0]));
         output.clear();
 
         return result;

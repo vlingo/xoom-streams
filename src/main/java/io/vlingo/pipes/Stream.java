@@ -2,6 +2,7 @@ package io.vlingo.pipes;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.Stoppable;
+import io.vlingo.pipes.actor.Materialized;
 import io.vlingo.pipes.operator.Filter;
 import io.vlingo.pipes.operator.Map;
 
@@ -51,14 +52,14 @@ public class Stream<B, E> implements Closeable {
     }
 
     public void materialize() {
-        var operatorSource = source.materialize(stage, null);
+        Materialized operatorSource = source.materialize(stage, null);
         stoppables.add(operatorSource);
-        for (var op : operators) {
+        for (Operator<?, ?> op : operators) {
             operatorSource = op.materialize(stage, operatorSource.asSource().await());
             stoppables.add(operatorSource);
         }
 
-        var stoppable = sink.materialize(stage, operatorSource.asSource().await());
+        Stoppable stoppable = sink.materialize(stage, operatorSource.asSource().await());
         stoppables.add(stoppable);
     }
 

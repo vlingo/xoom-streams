@@ -16,7 +16,7 @@ import io.vlingo.pipes.actor.MaterializedSource;
 import io.vlingo.pipes.actor.MaterializedSourceActor;
 
 import java.util.ArrayDeque;
-import java.util.List;
+import java.util.Collections;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,7 +25,7 @@ public class RawRequestHandler extends RequestHandler implements Source<Request>
     private final Queue<Record<Request>> input;
 
     public RawRequestHandler(Method method, String path, Stage stage) {
-        super(method, path, List.of());
+        super(method, path, Collections.emptyList());
         this.stage = stage;
         this.input = new ArrayDeque<>(32);
     }
@@ -41,7 +41,7 @@ public class RawRequestHandler extends RequestHandler implements Source<Request>
 
     @Override
     public CompletableFuture<Record<Request>[]> poll() {
-        CompletableFuture<Record<Request>[]> result = CompletableFuture.completedFuture(input.toArray(Record[]::new));
+        CompletableFuture<Record<Request>[]> result = CompletableFuture.completedFuture(input.toArray(new Record[0]));
         input.clear();
 
         return result;

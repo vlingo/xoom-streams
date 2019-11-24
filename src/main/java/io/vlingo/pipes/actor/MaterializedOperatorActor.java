@@ -42,7 +42,7 @@ public class MaterializedOperatorActor extends Actor implements MaterializedSour
 
         int size = queue.size();
         Record[] res = new Record[size];
-        for (var i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             res[i] = queue.poll();
         }
 

@@ -25,7 +25,7 @@ public class Filter<A> extends BasicOperator<A, A> {
     @Override
     @SuppressWarnings("unchecked")
     public CompletableFuture<Record<A>[]> poll() {
-        CompletableFuture<Record<A>[]> result = CompletableFuture.completedFuture(output.toArray(Record[]::new));
+        CompletableFuture<Record<A>[]> result = CompletableFuture.completedFuture(output.toArray(new Record[0]));
         output.clear();
 
         return result;

@@ -5,7 +5,7 @@ import io.vlingo.pipes.sinks.SubscriptionSink;
 
 public class MyApp {
     public static void main(String[] args) throws InterruptedException {
-        var streams = Streams.app("my-app");
+        Streams streams = Streams.app("my-app");
 
         streams.from(streams.http.requestSource(Method.POST, "/"))
                 .map(e -> ">> " + e.body.content())

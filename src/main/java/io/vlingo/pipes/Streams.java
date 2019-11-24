@@ -28,7 +28,7 @@ public class Streams implements Closeable {
     }
 
     public <T> Stream<T, T> from(Source<T> source) {
-        var stream = Stream.within(world.stage(), source);
+        Stream<T, T> stream = Stream.within(world.stage(), source);
         streams.add(stream);
 
         return stream;
