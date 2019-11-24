@@ -47,18 +47,19 @@ public class Stream<B, E> implements Closeable {
 
     public Closeable to(Sink<E> sink) {
         this.sink = sink;
+        return this;
+    }
 
+    public void materialize() {
         var operatorSource = source.materialize(stage, null);
-        this.stoppables.add(operatorSource);
+        stoppables.add(operatorSource);
         for (var op : operators) {
             operatorSource = op.materialize(stage, operatorSource.asSource().await());
-            this.stoppables.add(operatorSource);
+            stoppables.add(operatorSource);
         }
 
         var stoppable = sink.materialize(stage, operatorSource.asSource().await());
-        this.stoppables.add(stoppable);
-
-        return this;
+        stoppables.add(stoppable);
     }
 
     @Override

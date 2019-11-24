@@ -2,6 +2,7 @@ package io.vlingo.pipes;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.World;
+import io.vlingo.pipes.http.HttpStreamServer;
 
 import java.io.Closeable;
 import java.util.LinkedList;
@@ -10,10 +11,12 @@ import java.util.List;
 public class Streams implements Closeable {
     private final World world;
     private final List<Stream<?, ?>> streams;
+    public final HttpStreamServer http;
 
     private Streams(World world) {
         this.world = world;
         this.streams = new LinkedList<>();
+        this.http = new HttpStreamServer(world.stage());
     }
 
     public static Streams app(final String name) {
@@ -25,12 +28,21 @@ public class Streams implements Closeable {
     }
 
     public <T> Stream<T, T> from(Source<T> source) {
-        return Stream.within(world.stage(), source);
+        var stream = Stream.within(world.stage(), source);
+        streams.add(stream);
+
+        return stream;
+    }
+
+    public void start() {
+        streams.forEach(Stream::materialize);
+        http.start(world.stage(), 8080);
     }
 
     @Override
     public void close() {
         streams.forEach(Stream::close);
+        http.close();
         world.terminate();
     }
 }

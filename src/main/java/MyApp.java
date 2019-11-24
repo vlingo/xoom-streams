@@ -1,17 +1,21 @@
+import io.vlingo.http.Method;
+import io.vlingo.http.Response;
 import io.vlingo.pipes.Streams;
-import io.vlingo.pipes.sinks.PrintSink;
-import io.vlingo.pipes.sources.CollectionSource;
+import io.vlingo.pipes.sinks.SubscriptionSink;
 
 public class MyApp {
     public static void main(String[] args) throws InterruptedException {
         var streams = Streams.app("my-app");
 
-        streams.from(CollectionSource.fromArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
-                .map(e -> e * 5)
-                .filter(e -> (e % 2) == 0)
-                .to(PrintSink.stdout("ps1> "));
+        streams.from(streams.http.requestSource(Method.POST, "/"))
+                .map(e -> ">> " + e.body.content())
+                .map(String::toUpperCase)
+                .map(e -> Response.of(Response.Status.Ok, e))
+                .to(streams.http.responseSink());
 
-        Thread.sleep(1000);
-        streams.close();
+        streams.from(streams.http.requestSource(Method.GET, "/close"))
+                .to(SubscriptionSink.subscribingWith(request -> streams.close()));
+
+        streams.start();
     }
 }
