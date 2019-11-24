@@ -1,8 +1,6 @@
 package io.vlingo.pipes.http.handler;
 
-import io.vlingo.actors.CompletesEventually;
 import io.vlingo.actors.Logger;
-import io.vlingo.actors.Returns;
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Method;
@@ -34,12 +32,11 @@ public class RawRequestHandler extends RequestHandler implements Source<Request>
 
     @Override
     protected Completes<Response> execute(Request var1, Action.MappedParameters var2, Logger var3) {
-        Returns<Response> returns = Returns.value(Completes.using(stage.scheduler()));
-        CompletesEventually completes = stage.world().completesFor(returns);
+        Completes<Response> completes = Completes.using(stage.scheduler());
         Record<Request> request = Record.of(var1).withMetadata("completes", completes);
 
         input.add(request);
-        return returns.asCompletes();
+        return completes;
     }
 
     @Override
