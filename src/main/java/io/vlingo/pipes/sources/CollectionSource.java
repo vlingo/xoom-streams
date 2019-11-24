@@ -11,6 +11,7 @@ import io.vlingo.pipes.actor.MaterializedSourceActor;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class CollectionSource<T> implements Source<T> {
     private final static Record[] EMPTY = new Record[0];
@@ -25,6 +26,9 @@ public class CollectionSource<T> implements Source<T> {
 
     public static <T> CollectionSource<T> fromArray(T... t) {
         return new CollectionSource<>(Arrays.asList(t));
+    }
+    public static <T> CollectionSource<T> fromIterable(Iterable<T> t) {
+        return new CollectionSource<>(java.util.stream.StreamSupport.stream(t.spliterator(), false).collect(Collectors.toList()));
     }
 
     @Override

@@ -6,7 +6,9 @@ import io.vlingo.common.Tuple2;
 import io.vlingo.pipes.actor.Materialized;
 import io.vlingo.pipes.operator.Filter;
 import io.vlingo.pipes.operator.Map;
+import io.vlingo.pipes.operator.Through;
 import io.vlingo.pipes.operator.ZipWithSource;
+import io.vlingo.pipes.sources.CollectionSource;
 
 import java.io.Closeable;
 import java.util.ArrayDeque;
@@ -52,6 +54,16 @@ public class Stream<B, E> implements Closeable {
     public <K> Stream<B, Tuple2<E, K>> zip(Source<K> source) {
         this.operators.add(new ZipWithSource<>(source, new ArrayDeque<>(32)));
         return (Stream<B, Tuple2<E, K>>) this;
+    }
+
+    public <K> Stream<B, Tuple2<E, K>> zip(Iterable<K> source) {
+        this.operators.add(new ZipWithSource<>(CollectionSource.fromIterable(source), new ArrayDeque<>(32)));
+        return (Stream<B, Tuple2<E, K>>) this;
+    }
+
+    public Stream<B, E> through(Sink<E> sink) {
+        this.operators.add(new Through<>(sink, new ArrayDeque<>(32)));
+        return this;
     }
 
     public Closeable to(Sink<E> sink) {
