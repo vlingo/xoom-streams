@@ -2,19 +2,18 @@ package io.vlingo.pipes;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.Stoppable;
+import io.vlingo.common.Completes;
 import io.vlingo.common.Tuple2;
 import io.vlingo.pipes.actor.Materialized;
-import io.vlingo.pipes.operator.Filter;
-import io.vlingo.pipes.operator.Map;
-import io.vlingo.pipes.operator.Through;
-import io.vlingo.pipes.operator.ZipWithSource;
-import io.vlingo.pipes.sources.CollectionSource;
+import io.vlingo.pipes.operator.*;
 
 import java.io.Closeable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -38,16 +37,29 @@ public class Stream<B, E> implements Closeable {
         return new Stream<>(stage, source);
     }
 
-    @SuppressWarnings("unchecked")
-    public <X> Stream<B, X> map(Function<E, X> mapper) {
-        this.operators.add(new Map<>(new ArrayDeque<>(32), mapper));
+    public <X> Stream<B, X> lift(Operator<E, X> operator) {
+        this.operators.add(operator);
         return (Stream<B, X>) this;
     }
 
     @SuppressWarnings("unchecked")
+    public <X> Stream<B, X> map(Function<E, X> mapper) {
+        return lift(new Map<>(new ArrayDeque<>(32), mapper));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> Stream<B, X> flatMapFuture(Function<E, CompletableFuture<X>> mapper) {
+        return lift(new FlatMapCompletableFuture<>(new ArrayDeque<>(32), mapper));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> Stream<B, X> flatMapCompletes(Function<E, Completes<X>> mapper) {
+        return lift(new FlatMapCompletes<>(new ArrayDeque<>(32), mapper));
+    }
+
+    @SuppressWarnings("unchecked")
     public Stream<B, E> filter(Predicate<E> filter) {
-        this.operators.add(new Filter<>(new ArrayDeque<>(32), filter));
-        return this;
+        return lift(new Filter<>(new ArrayDeque<>(32), filter));
     }
 
     @SuppressWarnings("unchecked")
@@ -56,14 +68,12 @@ public class Stream<B, E> implements Closeable {
         return (Stream<B, Tuple2<E, K>>) this;
     }
 
-    public <K> Stream<B, Tuple2<E, K>> zip(Iterable<K> source) {
-        this.operators.add(new ZipWithSource<>(CollectionSource.fromIterable(source), new ArrayDeque<>(32)));
-        return (Stream<B, Tuple2<E, K>>) this;
+    public Stream<B, E> through(Sink<E> sink) {
+        return lift(new Through<>(sink, new ArrayDeque<>(32)));
     }
 
-    public Stream<B, E> through(Sink<E> sink) {
-        this.operators.add(new Through<>(sink, new ArrayDeque<>(32)));
-        return this;
+    public Stream<B, E> delay(int time, TimeUnit unit) {
+        return lift(new Delay<>(new ArrayDeque<>(32), time, unit));
     }
 
     public Closeable to(Sink<E> sink) {
