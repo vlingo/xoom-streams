@@ -114,7 +114,7 @@ public class StreamPublisher<A,B> extends Actor implements Publisher<B>, Control
 
     cancellable.cancel();
 
-    // TODO: send onCompleted() or onError() to remaining subscribers?
+    completeAll();
 
     super.stop();
   }
