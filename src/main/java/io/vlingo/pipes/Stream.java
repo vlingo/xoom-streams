@@ -7,13 +7,6 @@
 
 package io.vlingo.pipes;
 
-import io.vlingo.actors.Stage;
-import io.vlingo.actors.Stoppable;
-import io.vlingo.common.Completes;
-import io.vlingo.common.Tuple2;
-import io.vlingo.pipes.actor.Materialized;
-import io.vlingo.pipes.operator.*;
-
 import java.io.Closeable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -23,6 +16,19 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import io.vlingo.actors.Stage;
+import io.vlingo.actors.Stoppable;
+import io.vlingo.common.Completes;
+import io.vlingo.common.Tuple2;
+import io.vlingo.pipes.actor.Materialized;
+import io.vlingo.pipes.operator.Delay;
+import io.vlingo.pipes.operator.Filter;
+import io.vlingo.pipes.operator.FlatMapCompletableFuture;
+import io.vlingo.pipes.operator.FlatMapCompletes;
+import io.vlingo.pipes.operator.Map;
+import io.vlingo.pipes.operator.Through;
+import io.vlingo.pipes.operator.ZipWithSource;
 
 public class Stream<B, E> implements Closeable {
     public static final int DEFAULT_POLL_INTERVAL = 5;
@@ -44,27 +50,24 @@ public class Stream<B, E> implements Closeable {
         return new Stream<>(stage, source);
     }
 
+    @SuppressWarnings("unchecked")
     public <X> Stream<B, X> lift(Operator<E, X> operator) {
         this.operators.add(operator);
         return (Stream<B, X>) this;
     }
 
-    @SuppressWarnings("unchecked")
     public <X> Stream<B, X> map(Function<E, X> mapper) {
         return lift(new Map<>(new ArrayDeque<>(32), mapper));
     }
 
-    @SuppressWarnings("unchecked")
     public <X> Stream<B, X> flatMapFuture(Function<E, CompletableFuture<X>> mapper) {
         return lift(new FlatMapCompletableFuture<>(new ArrayDeque<>(32), mapper));
     }
 
-    @SuppressWarnings("unchecked")
     public <X> Stream<B, X> flatMapCompletes(Function<E, Completes<X>> mapper) {
         return lift(new FlatMapCompletes<>(new ArrayDeque<>(32), mapper));
     }
 
-    @SuppressWarnings("unchecked")
     public Stream<B, E> filter(Predicate<E> filter) {
         return lift(new Filter<>(new ArrayDeque<>(32), filter));
     }
