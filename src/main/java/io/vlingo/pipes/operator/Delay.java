@@ -1,5 +1,10 @@
 package io.vlingo.pipes.operator;
 
+import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+
 // Copyright © 2012-2019 Vaughn Vernon. All rights reserved.
 //
 // This Source Code Form is subject to the terms of the
@@ -8,11 +13,6 @@ package io.vlingo.pipes.operator;
 // one at https://mozilla.org/MPL/2.0/.
 
 import io.vlingo.pipes.Record;
-
-import java.util.Queue;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 
 public class Delay<A> extends BasicOperator<A, A> {
     private final Queue<Record<A>> output;
@@ -24,7 +24,7 @@ public class Delay<A> extends BasicOperator<A, A> {
         this.output = output;
         this.time = time;
         this.unit = unit;
-        this.executor = CompletableFuture.delayedExecutor(time, unit);
+        this.executor = null; // CompletableFuture.delayedExecutor(time, unit);
     }
 
     @Override
