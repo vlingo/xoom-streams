@@ -17,7 +17,6 @@ import io.vlingo.actors.Actor;
 import io.vlingo.actors.Stoppable;
 import io.vlingo.common.Cancellable;
 import io.vlingo.common.Scheduled;
-import io.vlingo.reactivestreams.Streams.PublisherConfiguration;
 
 public class StreamPublisher<A,B> extends Actor implements Publisher<B>, ControlledSubscription<B>, Scheduled<Void>, Stoppable {
   private static final Object[] none = new Object[] { null };
