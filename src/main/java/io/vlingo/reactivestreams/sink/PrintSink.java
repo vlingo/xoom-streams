@@ -22,9 +22,20 @@ public class PrintSink<T> implements Sink<T> {
   private final String prefix;
   private boolean terminated;
 
+  /**
+   * Constructs my default state.
+   * @param printStream the PrintStream through which to print my values
+   * @param prefix the String used to begin each printed line
+   */
   public PrintSink(final PrintStream printStream, final String prefix) {
     this.printStream = printStream;
     this.prefix = prefix;
+    this.terminated = false;
+  }
+
+  @Override
+  public void ready() {
+    // ignored
   }
 
   @Override
@@ -37,5 +48,10 @@ public class PrintSink<T> implements Sink<T> {
     if (!terminated) {
       printStream.println(prefix + value.toString());
     }
+  }
+
+  @Override
+  public String toString() {
+    return "PrintSink[terminated=" + terminated + "]";
   }
 }
