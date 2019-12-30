@@ -17,7 +17,7 @@ import org.reactivestreams.Subscription;
 import io.vlingo.actors.testkit.AccessSafely;
 
 public class TestSubscriber<T> implements Subscriber<T> {
-  private AccessSafely access = AccessSafely.afterCompleting(0);
+  private AccessSafely access;
 
   private final AtomicInteger onSubscribeCount = new AtomicInteger(0);
   private final AtomicInteger onNextCount = new AtomicInteger(0);
@@ -25,6 +25,8 @@ public class TestSubscriber<T> implements Subscriber<T> {
   private final AtomicInteger onCompleteCount = new AtomicInteger(0);
 
   private final List<T> values = new CopyOnWriteArrayList<>();
+
+  private final Sink<T> sink;
 
   private boolean cancelled = false;
   private final int cancelAfterElements;
@@ -36,8 +38,15 @@ public class TestSubscriber<T> implements Subscriber<T> {
   }
 
   public TestSubscriber(final int total, final int cancelAfterElements) {
+    this(null, total, cancelAfterElements);
+  }
+
+  public TestSubscriber(final Sink<T> sink, final int total, final int cancelAfterElements) {
+    this.sink = sink;
     this.total = total;
     this.cancelAfterElements = cancelAfterElements;
+
+    this.access = afterCompleting(0);
   }
 
   @Override
@@ -51,6 +60,10 @@ public class TestSubscriber<T> implements Subscriber<T> {
     // System.out.println("RECEIVED ON SUBSCRIBE: " + subscription);
     access.writeUsing("onSubscribe", 1);
     subscription.request(total);
+
+    if (sink != null) {
+      sink.ready();
+    }
   }
 
   @Override
@@ -61,7 +74,14 @@ public class TestSubscriber<T> implements Subscriber<T> {
 
     if (onNextCount.get() >= cancelAfterElements && !cancelled) {
       subscription.cancel();
+      if (sink != null) {
+        sink.terminate();
+      }
       cancelled = true;
+    }
+
+    if (sink != null) {
+      sink.whenValue(value);
     }
   }
 
@@ -69,12 +89,20 @@ public class TestSubscriber<T> implements Subscriber<T> {
   public void onComplete() {
     // System.out.println("RECEIVED ON COMPLETE");
     access.writeUsing("onComplete", 1);
+
+    if (sink != null) {
+      sink.terminate();
+    }
   }
 
   @Override
   public void onError(final Throwable t) {
     // System.out.println("RECEIVED ON ERROR: " + t.getMessage());
     access.writeUsing("onError", 1);
+
+    if (sink != null) {
+      sink.terminate();
+    }
   }
 
   public AccessSafely afterCompleting(final int times) {
