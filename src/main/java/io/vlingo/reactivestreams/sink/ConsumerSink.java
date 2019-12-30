@@ -11,13 +11,27 @@ import java.util.function.Consumer;
 
 import io.vlingo.reactivestreams.Sink;
 
+/**
+ * A {@code Sink<T>} that provides values to a given {@code Consumer<T>}.
+ *
+ * @param <T> the type of the value to be provided to the {@code Consumer<T>}.
+ */
 public class ConsumerSink<T> implements Sink<T> {
   private final Consumer<T> consumer;
   private boolean terminated;
 
+  /**
+   * Constructs my default state.
+   * @param consumer the {@code Consumer<T>} to accept my values
+   */
   public ConsumerSink(final Consumer<T> consumer) {
     this.consumer = consumer;
     this.terminated = false;
+  }
+
+  @Override
+  public void ready() {
+    // ignored
   }
 
   @Override
@@ -30,5 +44,10 @@ public class ConsumerSink<T> implements Sink<T> {
     if (!terminated) {
       consumer.accept(value);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "ConsumerSink[terminated=" + terminated + "]";
   }
 }
