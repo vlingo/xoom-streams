@@ -14,8 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import io.vlingo.reactivestreams.Streams.PublisherConfiguration;
-
 final class SubscriptionController<T> implements Subscription {
   static final AtomicInteger nextId = new AtomicInteger(0);
 
