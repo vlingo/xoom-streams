@@ -16,7 +16,7 @@ import io.vlingo.reactivestreams.source.IterableSource;
 import io.vlingo.reactivestreams.source.SupplierSource;
 
 /**
- * The source of a {@code Stream} that provides {@code Element<T>} of
+ * The upstream source of a {@code Stream} that provides {@code Element<T>} of
  * next available value(s), or indicates termination of such values.
  * <p>
  * WARNING:
