@@ -45,29 +45,4 @@ public class Streams {
      */
     DropCurrent
   }
-
-  /**
-   * The standard configuration for any {@code StreamPublisher}.
-   */
-  static final class PublisherConfiguration {
-    public final int bufferSize;
-    public final int maxThrottle;
-    public final OverflowPolicy overflowPolicy;
-    public final int probeInterval;
-
-    public PublisherConfiguration(final int probeInterval, final int maxThrottle, final int bufferSize, final OverflowPolicy overflowPolicy) {
-      assert(probeInterval > 0);
-      this.probeInterval = probeInterval;
-      assert(maxThrottle == Streams.DefaultMaxThrottle || maxThrottle > 0);
-      this.maxThrottle = maxThrottle;
-      assert(bufferSize > 0);
-      this.bufferSize = bufferSize;
-      assert(overflowPolicy != null);
-      this.overflowPolicy = overflowPolicy;
-    }
-
-    public PublisherConfiguration(final int probeInterval, final OverflowPolicy overflowPolicy) {
-      this(probeInterval, DefaultMaxThrottle, DefaultBufferSize, overflowPolicy);
-    }
-  }
 }
