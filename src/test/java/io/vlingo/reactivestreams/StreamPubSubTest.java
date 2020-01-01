@@ -24,6 +24,7 @@ public abstract class StreamPubSubTest {
   protected PublisherConfiguration configuration;
   protected ControlledSubscription<String> controlledSubscription;
   protected Publisher<String> publisher;
+  protected Source<String> sourceOf123;
   protected Source<String> sourceOfABC;
   protected Source<String> sourceRandomNumberOfElements;
   protected Subscriber<String> subscriber;
@@ -34,6 +35,8 @@ public abstract class StreamPubSubTest {
     world = World.startWithDefaults("streams");
 
     configuration = new PublisherConfiguration(5, OverflowPolicy.DropHead);
+
+    sourceOf123 = Source.only("1", "2", "3");
 
     sourceOfABC = Source.only("A", "B", "C");
 
@@ -56,13 +59,27 @@ public abstract class StreamPubSubTest {
   }
 
   @SuppressWarnings("unchecked")
-  protected void createSubscriberWith(final Sink<String> sink, final long requestThreshold) {
+  protected <T> void createSubscriberWith(final Sink<T> sink, final long requestThreshold) {
     subscriber = world.actorFor(Subscriber.class, StreamSubscriber.class, sink, requestThreshold);
 
     publisher.subscribe(subscriber);
   }
 
-  protected List<String> listOf1To(final int n) {
+  @SuppressWarnings("unchecked")
+  protected <T>Subscriber<T> createSubscriberWithoutSubscribing(final Sink<T> sink, final long requestThreshold) {
+    final Subscriber<T> subscriber = world.actorFor(Subscriber.class, StreamSubscriber.class, sink, requestThreshold);
+    return subscriber;
+  }
+
+  protected List<Integer> integerListOf1To(final int n) {
+    final List<Integer> list = new ArrayList<>();
+    for (int idx = 1; idx <= n; ++idx) {
+      list.add(idx);
+    }
+    return list;
+  }
+
+  protected List<String> stringListOf1To(final int n) {
     final List<String> list = new ArrayList<>();
     for (int idx = 1; idx <= n; ++idx) {
       list.add(String.valueOf(idx));
