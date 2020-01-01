@@ -18,6 +18,8 @@ import java.util.List;
  * @param <T> the type of element value
  */
 public class Elements<T> {
+  private static final Object[] Empty = new Object[0];
+
   /**
    * Zero or more element values.
    */
@@ -28,6 +30,48 @@ public class Elements<T> {
    * otherwise {@code false}.
    */
   public final boolean terminated;
+
+  /**
+   * Answer a new {@code Elements<T>} with no {@code values} but that is not {@code terminated}.
+   * @param <T> type type of the {@code Elements<T>}
+   * @return {@code Elements<T>}
+   */
+  @SuppressWarnings("unchecked")
+  public static final <T> Elements<T> empty() {
+    return new Elements<>((T[]) Empty, false);
+  }
+
+  /**
+   * Answer a new {@code Elements<T>} with the single {@code value} of {@code elements}.
+   * @param value the T typed value instance of the new {@code Elements<T>}
+   * @param <T> type type of the {@code Elements<T>}
+   * @return {@code Elements<T>}
+   */
+  @SuppressWarnings("unchecked")
+  public static final <T> Elements<T> of(final T value) {
+    return new Elements<>((T[]) new Object[] { value }, false);
+  }
+
+  /**
+   * Answer a new {@code Elements<T>} with {@code values} of {@code elements}.
+   * @param values the T typed value instances of the new {@code Elements<T>}
+   * @param <T> type type of the {@code Elements<T>}
+   * @return {@code Elements<T>}
+   */
+  @SuppressWarnings("unchecked")
+  public static final <T> Elements<T> of(final T... values) {
+    return new Elements<>(values, false);
+  }
+
+  /**
+   * Answer a new {@code Elements<T>} with no {@code values} and that is {@code terminated}.
+   * @param <T> type type of the {@code Elements<T>}
+   * @return {@code Elements<T>}
+   */
+  @SuppressWarnings("unchecked")
+  public static final <T> Elements<T> terminated() {
+    return new Elements<>((T[]) Empty, true);
+  }
 
   /**
    * Constructs my state.
