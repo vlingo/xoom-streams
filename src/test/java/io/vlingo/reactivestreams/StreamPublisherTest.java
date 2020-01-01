@@ -83,7 +83,7 @@ public class StreamPublisherTest extends StreamPubSubTest {
     Assert.assertEquals(100, valueCount);
 
     final List<String> values = access.readFrom("values");
-    final List<String> expected = listOf1To(100);
+    final List<String> expected = stringListOf1To(100);
 
     Assert.assertEquals(expected, values);
   }
@@ -109,7 +109,7 @@ public class StreamPublisherTest extends StreamPubSubTest {
     Assert.assertTrue(50 <= valueCount);
 
     final List<String> values = access.readFrom("values");
-    final List<String> expected = listOf1To(valueCount);
+    final List<String> expected = stringListOf1To(valueCount);
 
     Assert.assertEquals(expected, values);
   }
@@ -139,7 +139,7 @@ public class StreamPublisherTest extends StreamPubSubTest {
     Assert.assertEquals(100, valueCount);
 
     final List<String> values = access.readFrom("values");
-    final List<String> expected = listOf1To(100);
+    final List<String> expected = stringListOf1To(100);
 
     Assert.assertEquals(expected, values);
   }
