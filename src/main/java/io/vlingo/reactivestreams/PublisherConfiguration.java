@@ -18,6 +18,18 @@ public class PublisherConfiguration {
   public final OverflowPolicy overflowPolicy;
   public final int probeInterval;
 
+  public static PublisherConfiguration defaultDropCurrent() {
+    return new PublisherConfiguration(5, Streams.DefaultMaxThrottle, Streams.DefaultBufferSize, OverflowPolicy.DropCurrent);
+  }
+
+  public static PublisherConfiguration defaultDropHead() {
+    return new PublisherConfiguration(5, Streams.DefaultMaxThrottle, Streams.DefaultBufferSize, OverflowPolicy.DropHead);
+  }
+
+  public static PublisherConfiguration defaultDropTail() {
+    return new PublisherConfiguration(5, Streams.DefaultMaxThrottle, Streams.DefaultBufferSize, OverflowPolicy.DropTail);
+  }
+
   public PublisherConfiguration(final int probeInterval, final int maxThrottle, final int bufferSize, final OverflowPolicy overflowPolicy) {
     assert(probeInterval > 0);
     this.probeInterval = probeInterval;
