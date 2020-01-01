@@ -7,37 +7,19 @@
 
 package io.vlingo.reactivestreams;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
 import io.vlingo.actors.Actor;
 import io.vlingo.actors.Stoppable;
-import io.vlingo.common.Cancellable;
 import io.vlingo.common.Scheduled;
 
-public class StreamPublisher<A,B> extends Actor implements Publisher<B>, ControlledSubscription<B>, Scheduled<Void>, Stoppable {
-  private static final Object[] none = new Object[] { null };
-
-  private Cancellable cancellable;
-  private final PublisherConfiguration configuration;
-  private final ControlledSubscription<B> controlledSubscription;
-  private final Scheduled<Void> scheduled;
-  private boolean slow;
-  private final Source<A> source;
-  private final Map<Integer,SubscriptionController<B>> subscriptions;
+public class StreamPublisher<T> extends Actor implements Publisher<T>, ControlledSubscription<T>, Scheduled<Void>, Stoppable {
+  private final StreamPublisherDelegate<T> delegate;
 
   @SuppressWarnings("unchecked")
-  public StreamPublisher(final Source<A> source, final PublisherConfiguration configuration) {
-    this.source = source;
-    this.configuration = configuration;
-    this.subscriptions = new HashMap<>(2);
-    this.controlledSubscription = selfAs(ControlledSubscription.class);
-    this.scheduled = selfAs(Scheduled.class);
-
-    determineIfSlow();
+  public StreamPublisher(final Source<T> source, final PublisherConfiguration configuration) {
+    this.delegate = new StreamPublisherDelegate<>(source, configuration, selfAs(ControlledSubscription.class), scheduler(), selfAs(Scheduled.class), selfAs(Stoppable.class));
   }
 
   //===================================
@@ -45,14 +27,8 @@ public class StreamPublisher<A,B> extends Actor implements Publisher<B>, Control
   //===================================
 
   @Override
-  public void subscribe(final Subscriber<? super B> subscriber) {
-    schedule(true);
-
-    final SubscriptionController<B> controller = new SubscriptionController<>(subscriber, controlledSubscription, configuration);
-
-    subscriptions.putIfAbsent(controller.id(), controller);
-
-    subscriber.onSubscribe(controller);
+  public void subscribe(final Subscriber<? super T> subscriber) {
+    delegate.subscribe(subscriber);
   }
 
   //===================================
@@ -60,19 +36,13 @@ public class StreamPublisher<A,B> extends Actor implements Publisher<B>, Control
   //===================================
 
   @Override
-  public void cancel(final SubscriptionController<B> controller) {
-    // TODO: sends message/exception?
-
-    // System.out.println("CANCEL: " + controller);
-
-    controller.cancelSubscription();
-
-    subscriptions.remove(controller.id());
+  public void cancel(final SubscriptionController<T> controller) {
+    delegate.cancel(controller);
   }
 
   @Override
-  public void request(final SubscriptionController<B> controller, final long maximum) {
-    controller.requestFlow(maximum);
+  public void request(final SubscriptionController<T> controller, final long maximum) {
+    delegate.request(controller, maximum);
   }
 
   //===================================
@@ -81,26 +51,7 @@ public class StreamPublisher<A,B> extends Actor implements Publisher<B>, Control
 
   @Override
   public void intervalSignal(final Scheduled<Void> scheduled, final Void data) {
-    if (subscriptions.isEmpty()) {
-      return;
-    }
-
-    source
-      .next()
-      .andThen(maybeElements -> {
-        if (!maybeElements.terminated) {
-          // System.out.println("ELEMENTS: " + maybeElements.toString());
-          publish(maybeElements.values);
-          schedule(false);
-          return maybeElements;
-        } else {
-          // System.out.println("COMPLETING ALL");
-          completeAll();
-          selfAs(Stoppable.class).stop();
-        }
-        return maybeElements;
-      })
-      .andFinally();
+    delegate.processNext();
   }
 
   //===================================
@@ -109,58 +60,8 @@ public class StreamPublisher<A,B> extends Actor implements Publisher<B>, Control
 
   @Override
   public void stop() {
-    // System.out.println("STOPPING");
-
-    cancellable.cancel();
-
-    completeAll();
+    delegate.stop();
 
     super.stop();
-  }
-
-  private void completeAll() {
-    subscriptions.values().forEach(controller -> controller.subscriber().onComplete());
-
-    subscriptions.clear();
-  }
-
-  private void determineIfSlow() {
-    // pure evil; don't try this at home.
-    // BTW, it is most likely not a slow
-    // operation to determine whether the
-    // Source is slow, like intsy tinsy
-    // blocking.
-    this.slow = source.isSlow().await();
-  }
-
-  @SuppressWarnings("unchecked")
-  private A[] publish(final A[] maybeElements) {
-    final A[] elements = maybeElements.length > 0 ? maybeElements : (A[]) none;
-
-    for (int idx = 0; idx < elements.length; ++idx) {
-      publish(maybeElements[idx]);
-    }
-
-    return maybeElements;
-  }
-
-  private void publish(final A elementOrNull) {
-    subscriptions.values().forEach(controller -> controller.onNext(toB(elementOrNull)));
-  }
-
-  private void schedule(final boolean isSubscribing) {
-    if (slow) {
-      cancellable = scheduler().scheduleOnce(scheduled, null, 0, configuration.probeInterval);
-    } else {
-      if (isSubscribing && cancellable == null) {
-        cancellable = scheduler().schedule(scheduled, null, 0, configuration.probeInterval);
-      }
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private B toB(final A element) {
-    // System.out.println("TO B: " + element);
-    return (B) element;
   }
 }
