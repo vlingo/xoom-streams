@@ -14,17 +14,17 @@ import java.util.function.Consumer;
 
 import io.vlingo.actors.testkit.AccessSafely;
 
-public class SafeConsumerSink implements Sink<String>, Consumer<String> {
-  private AccessSafely access = AccessSafely.afterCompleting(0);
+public class SafeConsumerSink<T> implements Sink<T>, Consumer<T> {
+  private AccessSafely access = afterCompleting(0);
 
   private AtomicInteger readyCount = new AtomicInteger(0);
   private AtomicInteger terminateCount = new AtomicInteger(0);
   private AtomicInteger valueCount = new AtomicInteger(0);
 
-  private final List<String> values = new CopyOnWriteArrayList<>();
+  private final List<T> values = new CopyOnWriteArrayList<>();
 
   @Override
-  public void accept(final String value) {
+  public void accept(final T value) {
     whenValue(value);
   }
 
@@ -39,7 +39,7 @@ public class SafeConsumerSink implements Sink<String>, Consumer<String> {
   }
 
   @Override
-  public void whenValue(final String value) {
+  public void whenValue(final T value) {
     access.writeUsing("value", 1);
     access.writeUsing("values", value);
   }
@@ -51,7 +51,7 @@ public class SafeConsumerSink implements Sink<String>, Consumer<String> {
     access.writingWith("terminate", (Integer value) -> { terminateCount.addAndGet(value); });
     access.writingWith("value", (Integer value) -> valueCount.addAndGet(value));
 
-    access.writingWith("values", (String value) -> values.add(value));
+    access.writingWith("values", (T value) -> values.add(value));
 
     access.readingWith("ready", () -> readyCount.get());
     access.readingWith("terminate", () -> terminateCount.get());
@@ -75,7 +75,7 @@ public class SafeConsumerSink implements Sink<String>, Consumer<String> {
       }
       try { Thread.sleep(100); } catch (Exception e) { }
     }
-    return expected == 0 ? -1 : 0;
+    return expected == 0 ? -1 : current;
   }
 
   @Override
