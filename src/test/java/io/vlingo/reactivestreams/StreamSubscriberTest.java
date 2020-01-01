@@ -16,7 +16,7 @@ import org.junit.Test;
 import io.vlingo.actors.testkit.AccessSafely;
 
 public class StreamSubscriberTest extends StreamPubSubTest {
-  private SafeConsumerSink sink;
+  private SafeConsumerSink<String> sink;
 
   @Test
   public void testThatSubscriberSubscribes() {
@@ -88,7 +88,7 @@ public class StreamSubscriberTest extends StreamPubSubTest {
 
     final List<String> values = access.readFrom("values");
 
-    final List<String> expected = listOf1To(100);
+    final List<String> expected = stringListOf1To(100);
 
     Assert.assertEquals(expected, values);
   }
@@ -116,7 +116,7 @@ public class StreamSubscriberTest extends StreamPubSubTest {
     Assert.assertEquals(1, terminateCount);
 
     final List<String> values = access.readFrom("values");
-    final List<String> expected = listOf1To(valueCount);
+    final List<String> expected = stringListOf1To(valueCount);
 
     Assert.assertEquals(expected, values);
   }
@@ -126,6 +126,6 @@ public class StreamSubscriberTest extends StreamPubSubTest {
   public void setUp() {
     super.setUp();
 
-    sink = new SafeConsumerSink();
+    sink = new SafeConsumerSink<>();
   }
 }
