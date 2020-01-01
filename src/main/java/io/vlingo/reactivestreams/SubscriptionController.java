@@ -112,6 +112,10 @@ final class SubscriptionController<T> implements Subscription {
     }
   }
 
+  void onError(final Throwable cause) {
+    subscriber.onError(cause);
+  }
+
   private void dropHeadFor(final T element) {
     buffer.poll();
     buffer.add(element);
