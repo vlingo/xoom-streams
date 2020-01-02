@@ -22,7 +22,7 @@ import io.vlingo.common.Scheduled;
 import io.vlingo.reactivestreams.sink.ConsumerSink;
 
 /**
- * A {@code Processor<T,R>} implementation, where as a Subscriber<T> I consumes from an
+ * A {@code Processor<T,R>} implementation, where as a {@code Subscriber<T>} I consumes from an
  * upstream {@code Publisher<T>}, transform those signals using {@code Transformer<T,R>},
  * and emit new signals via my own {@code Publisher<R>}.
  * <p>
@@ -60,16 +60,22 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
 
   @Override
   public void onSubscribe(final Subscription subscription) {
+    System.out.println("PROCESSOR-ONSUBSCRIBE: " + subscription);
+
     subscriberDelegate.onSubscribe(subscription);
   }
 
   @Override
   public void onNext(final T value) {
+    System.out.println("PROCESSOR-ONNEXT: " + value);
+
     subscriberDelegate.onNext(value);
   }
 
   @Override
   public void onComplete() {
+    System.out.println("PROCESSOR-ONCOMPLETE");
+
     this.subscriberDelegate.onComplete();
 
     publisherSource.termiante();
@@ -77,6 +83,10 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
 
   @Override
   public void onError(final Throwable cause) {
+    System.out.println("PROCESSOR-ONERROR: " + cause.getMessage());
+
+    publisherDelegate.publish(cause);
+
     subscriberDelegate.onError(cause);
 
     publisherSource.termiante();
@@ -88,6 +98,8 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
 
   @Override
   public void subscribe(final Subscriber<? super R> subscriber) {
+    System.out.println("PROCESSOR-ONSUBSCRIBE: " + subscriber);
+
     publisherDelegate.subscribe(subscriber);
   }
 

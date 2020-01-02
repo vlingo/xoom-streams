@@ -114,7 +114,7 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
   }
 
   void publish(final Throwable cause) {
-    subscriptions.values().forEach(controller -> controller.onError(cause));
+    subscriptions.values().forEach(controller -> { System.out.println("PUBLISH-EXCEPTION: " + cause.getMessage()); controller.onError(cause); });
   }
 
   void stop() {
