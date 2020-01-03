@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 
 import org.reactivestreams.Processor;
 import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
 import org.reactivestreams.tck.IdentityProcessorVerification;
 import org.reactivestreams.tck.TestEnvironment;
 
@@ -49,7 +50,12 @@ public class StreamProcessorCompatibilityTest extends IdentityProcessorVerificat
 
   @Override
   public Publisher<Integer> createFailedPublisher() {
-    return s -> s.onError(new RuntimeException("Can't subscribe subscriber: " + s + ", because of reasons."));
+    return new Publisher<Integer>() {
+      @Override
+      public void subscribe(Subscriber<? super Integer> s) {
+        s.onError(new RuntimeException("Can't subscribe subscriber: " + s + ", because of reasons."));
+      }
+    };
   }
 
   @Override
