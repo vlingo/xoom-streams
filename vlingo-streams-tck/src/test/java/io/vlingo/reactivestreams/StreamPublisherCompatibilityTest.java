@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
 import org.reactivestreams.tck.PublisherVerification;
 import org.reactivestreams.tck.TestEnvironment;
 
@@ -40,7 +41,12 @@ public class StreamPublisherCompatibilityTest extends PublisherVerification<Long
 
   @Override
   public Publisher<Long> createFailedPublisher() {
-    return s -> s.onError(new RuntimeException("Can't subscribe subscriber: " + s + ", because of reasons."));
+    return new Publisher<Long>() {
+      @Override
+      public void subscribe(Subscriber<? super Long> s) {
+        s.onError(new RuntimeException("Can't subscribe subscriber: " + s + ", because of reasons."));
+      }
+    };
   }
 
   @Override
