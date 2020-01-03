@@ -91,22 +91,26 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
       return;
     }
 
-    source
-      .next()
-      .andThen(maybeElements -> {
-        if (!maybeElements.terminated) {
-          // System.out.println("ELEMENTS: " + maybeElements.toString());
-          publish(maybeElements.values);
-          schedule(false);
+    try {
+      source
+        .next()
+        .andThen(maybeElements -> {
+          if (!maybeElements.terminated) {
+            // System.out.println("ELEMENTS: " + maybeElements.toString());
+            publish(maybeElements.values);
+            schedule(false);
+            return maybeElements;
+          } else {
+            // System.out.println("COMPLETING ALL");
+            completeAll();
+            stoppable.stop();
+          }
           return maybeElements;
-        } else {
-          // System.out.println("COMPLETING ALL");
-          completeAll();
-          stoppable.stop();
-        }
-        return maybeElements;
-      })
-      .andFinally();
+        })
+        .andFinally();
+    } catch (Throwable t) {
+      publish(t);
+    }
   }
 
   void publish(final T elementOrNull) {
@@ -114,7 +118,7 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
   }
 
   void publish(final Throwable cause) {
-    subscriptions.values().forEach(controller -> { System.out.println("PUBLISH-EXCEPTION: " + cause.getMessage()); controller.onError(cause); });
+    subscriptions.values().forEach(controller -> controller.onError(cause));
   }
 
   void stop() {
