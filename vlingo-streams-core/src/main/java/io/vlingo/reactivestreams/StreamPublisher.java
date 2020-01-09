@@ -28,7 +28,9 @@ public class StreamPublisher<T> extends Actor implements Publisher<T>, Controlle
 
   @Override
   public void subscribe(final Subscriber<? super T> subscriber) {
-    delegate.subscribe(subscriber);
+    if (subscriber != null) {
+      delegate.subscribe(subscriber);
+    }
   }
 
   //===================================
