@@ -84,7 +84,20 @@ public interface Source<T> {
    * @return {@code Source<Long>}
    */
   static Source<Long> rangeOf(final long startInclusive, final long endExclusive) {
-    return new LongRangeSource(startInclusive, endExclusive);
+    return new LongRangeSource(startInclusive, orElseMaximum(endExclusive));
+  }
+
+  /**
+   * Answer the number of {@code elements}, or if {@code elements} is out of bounds,
+   * answer {@code Long.MAX_VALUE}.
+   * @param elements the long number of elements, which may be in bounds or out of bounds
+   * @return long
+   */
+  static long orElseMaximum(final long elements) {
+    if (elements <= Long.MAX_VALUE) {
+      return elements;
+    }
+    return Long.MAX_VALUE;
   }
 
   /**
