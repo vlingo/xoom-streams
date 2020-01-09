@@ -55,6 +55,8 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
 
   @Override
   public void subscribe(final Subscriber<? super T> subscriber) {
+    // System.out.println("SUBSCRIBE: " + subscriber);
+
     schedule(true);
 
     final SubscriptionController<T> controller = new SubscriptionController<>(subscriber, controlledSubscription, configuration);
@@ -79,7 +81,11 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
 
   @Override
   public void request(final SubscriptionController<T> controller, final long maximum) {
-    controller.requestFlow(maximum);
+    // System.out.println("REQUEST: " + controller + " MAXIMUM: " + maximum);
+
+    controller.requestFlow(controller.accumulate(maximum));
+
+    publish(controller, null); // immediately flush buffered elements, if any
   }
 
   //===================================
@@ -88,17 +94,20 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
 
   void processNext() {
     if (subscriptions.isEmpty()) {
+      // System.out.println("PROCESS NEXT EMPTY");
       return;
     }
-
+    // System.out.println("SOURCE: " + source);
     try {
       source
         .next()
         .andThen(maybeElements -> {
           if (!maybeElements.terminated) {
-            // System.out.println("ELEMENTS: " + maybeElements.toString());
+            // System.out.println("PROCESS NEXT: ELEMENTS: " + maybeElements.toString());
             publish(maybeElements.values);
             schedule(false);
+            return maybeElements;
+          } else if (flush()) {
             return maybeElements;
           } else {
             // System.out.println("COMPLETING ALL");
@@ -117,6 +126,10 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
     subscriptions.values().forEach(controller -> controller.onNext(elementOrNull));
   }
 
+  void publish(final SubscriptionController<T> controller, final T elementOrNull) {
+    controller.onNext(elementOrNull);
+  }
+
   void publish(final Throwable cause) {
     subscriptions.values().forEach(controller -> controller.onError(cause));
   }
@@ -130,6 +143,8 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
   }
 
   private void completeAll() {
+    // System.out.println("COMPLETE ALL");
+
     subscriptions.values().forEach(controller -> controller.subscriber().onComplete());
 
     subscriptions.clear();
@@ -144,6 +159,18 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
     this.slow = source.isSlow().await();
   }
 
+  private boolean flushed;
+  private boolean flush() {
+    flushed = false;
+    subscriptions.values().forEach(controller ->  {
+      if (controller.hasBufferedElements()) {
+        controller.onNext(null);
+        flushed = true;
+      }
+    });
+    return flushed;
+  }
+
   private T[] publish(final T[] maybeElements) {
     if (maybeElements.length > 0) {
       for (int idx = 0; idx < maybeElements.length; ++idx) {
@@ -156,9 +183,11 @@ public class StreamPublisherDelegate<T> implements Publisher<T>, ControlledSubsc
 
   private void schedule(final boolean isSubscribing) {
     if (slow) {
+      // System.out.println("SCHEDULE: " + isSubscribing + " SLOW");
       cancellable = scheduler.scheduleOnce(scheduled, null, 0, configuration.probeInterval);
     } else {
       if (isSubscribing && cancellable == null) {
+        // System.out.println("SCHEDULE: " + isSubscribing + " FAST");
         cancellable = scheduler.schedule(scheduled, null, 0, configuration.probeInterval);
       }
     }
