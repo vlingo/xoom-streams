@@ -13,8 +13,8 @@ import io.vlingo.reactivestreams.Source;
 
 public class LongRangeSource implements Source<Long> {
   private long current;
-  private final long endExclusive;
-  private final long startInclusive;
+  public final long endExclusive;
+  public final long startInclusive;
 
   public LongRangeSource(final long startInclusive, final long endExclusive) {
     assert(startInclusive < endExclusive);
