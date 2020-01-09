@@ -13,6 +13,10 @@ import io.vlingo.reactivestreams.Streams.OverflowPolicy;
  * The standard configuration for any {@code StreamPublisher}.
  */
 public class PublisherConfiguration {
+  public static int DefaultProbeInterval = 5;
+  public static int FastProbeInterval = 2;
+  public static int FastestProbeInterval = 1;
+
   public final int bufferSize;
   public final int maxThrottle;
   public final OverflowPolicy overflowPolicy;
@@ -28,6 +32,10 @@ public class PublisherConfiguration {
 
   public static PublisherConfiguration defaultDropTail() {
     return new PublisherConfiguration(5, Streams.DefaultMaxThrottle, Streams.DefaultBufferSize, OverflowPolicy.DropTail);
+  }
+
+  public static PublisherConfiguration with(final int probeInterval, final int maxThrottle, final int bufferSize, final OverflowPolicy overflowPolicy) {
+    return new PublisherConfiguration(probeInterval, maxThrottle, bufferSize, overflowPolicy);
   }
 
   public PublisherConfiguration(final int probeInterval, final int maxThrottle, final int bufferSize, final OverflowPolicy overflowPolicy) {
