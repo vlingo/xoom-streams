@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 
 import io.vlingo.common.Completes;
 import io.vlingo.reactivestreams.source.IterableSource;
+import io.vlingo.reactivestreams.source.LongRangeSource;
 import io.vlingo.reactivestreams.source.SupplierSource;
 
 /**
@@ -72,6 +73,18 @@ public interface Source<T> {
   @SuppressWarnings({ "unchecked", "rawtypes" })
   static <T> Source<T> only(final T... elements) {
     return new IterableSource(Arrays.asList(elements), false);
+  }
+
+  /**
+   * Answer a new {@code Source<Long>} with element(s) to be provided between
+   * {@code startInclusive} and {@code endExclusive}. The {@code Source<Long>} is
+   * non-slow.
+   * @param startInclusive the long start of the range, inclusive
+   * @param endExclusive the long end of the range, exclusive
+   * @return {@code Source<Long>}
+   */
+  static Source<Long> rangeOf(final long startInclusive, final long endExclusive) {
+    return new LongRangeSource(startInclusive, endExclusive);
   }
 
   /**
