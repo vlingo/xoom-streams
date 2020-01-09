@@ -64,6 +64,7 @@ public class Processor__Proxy<T, R> implements org.reactivestreams.Processor<T, 
   }
   @Override
   public void subscribe(org.reactivestreams.Subscriber<? super R> arg0) {
+    if (arg0 == null) throw new NullPointerException("Subscriber must not be null.");
     if (!actor.isStopped()) {
       final java.util.function.Consumer<Processor> consumer = (actor) -> actor.subscribe(arg0);
       if (mailbox.isPreallocated()) { mailbox.send(actor, Processor.class, consumer, null, subscribeRepresentation5); }
