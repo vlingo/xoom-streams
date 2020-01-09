@@ -20,6 +20,7 @@ public class Publisher__Proxy<T> implements org.reactivestreams.Publisher<T> {
 
   @Override
   public void subscribe(org.reactivestreams.Subscriber<? super T> arg0) {
+    if (arg0 == null) throw new NullPointerException("Subscriber must not be null.");
     if (!actor.isStopped()) {
       final java.util.function.Consumer<Publisher> consumer = (actor) -> actor.subscribe(arg0);
       if (mailbox.isPreallocated()) { mailbox.send(actor, Publisher.class, consumer, null, subscribeRepresentation1); }
