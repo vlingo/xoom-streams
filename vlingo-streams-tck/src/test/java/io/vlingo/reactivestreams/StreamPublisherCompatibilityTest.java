@@ -7,6 +7,8 @@
 
 package io.vlingo.reactivestreams;
 
+import static io.vlingo.reactivestreams.Source.orElseMaximum;
+
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.tck.PublisherVerification;
@@ -26,7 +28,7 @@ public class StreamPublisherCompatibilityTest extends PublisherVerification<Long
   @Override
   @SuppressWarnings("unchecked")
   public Publisher<Long> createPublisher(final long elements) {
-    final Source<Long> source = Source.rangeOf(1, elements + 1);
+    final Source<Long> source = Source.rangeOf(1, orElseMaximum(elements + 1));
 
     final PublisherConfiguration configuration =
             PublisherConfiguration.with(
