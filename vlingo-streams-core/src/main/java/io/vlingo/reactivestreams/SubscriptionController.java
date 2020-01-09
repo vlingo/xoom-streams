@@ -44,8 +44,11 @@ final class SubscriptionController<T> implements Subscription {
 
   @Override
   public void request(final long maximum) {
-    if (maximum < 0) {
-      throw new IllegalArgumentException("Must be >= 1 and <= Long.MAX_VALUE");
+    if (maximum <= 0) {
+      // System.out.println("REQUEST: " + maximum);
+      final IllegalArgumentException e = new IllegalArgumentException("Must be >= 1 and <= Long.MAX_VALUE");
+      subscriber.onError(e);
+      return;
     }
 
     subscription.request(this, maximum);
@@ -87,8 +90,14 @@ final class SubscriptionController<T> implements Subscription {
   // Publish
   //===================================
 
+  boolean hasBufferedElements() {
+    return !buffer.isEmpty();
+  }
+
   void onNext(final T element) {
+    // System.out.println("ON NEXT TOP REMAINING: " + remaining());
     if (remaining() > 0) {
+      // System.out.println("ON NEXT SENDING: " + element);
       sendNext(element);
     } else if (element == null) {
       // System.out.println("NO REMAINING: " + element);
@@ -130,7 +139,7 @@ final class SubscriptionController<T> implements Subscription {
 
   private void sendNext(final T element) {
     // System.out.println("REMAINING: " + remaining());
-    int throttleCount = (int) throttleCount();
+    long throttleCount = throttleCount();
     // System.out.println("THROTTLE: " + throttleCount);
     T currentElement = element;
     while (throttleCount-- > 0) {
@@ -164,6 +173,18 @@ final class SubscriptionController<T> implements Subscription {
   // Back pressure
   //===================================
 
+  long accumulate(final long amount) {
+    if (maximum < Long.MAX_VALUE) {
+      long accumulated = maximum + amount;
+      if (accumulated < 0) {
+        accumulated = Long.MAX_VALUE;
+      }
+      // System.out.println("ACCUMULATE: CURRENT MAXIMUM: " + maximum + " AMOUNT: " + amount + " ACCUMULATED: " + accumulated);
+      return accumulated;
+    }
+    return maximum;
+  }
+
   void cancelSubscription() {
     this.cancelled = true;
     this.count = 0;
@@ -195,6 +216,7 @@ final class SubscriptionController<T> implements Subscription {
   }
 
   void requestFlow(final long maximum) {
+    // System.out.println("REQUEST FLOW: " + maximum);
     this.count = 0;
     this.maximum = maximum;
   }
