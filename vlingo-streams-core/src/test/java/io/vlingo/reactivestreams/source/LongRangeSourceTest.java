@@ -35,13 +35,13 @@ public class LongRangeSourceTest {
     Assert.assertEquals(10, current);
   }
 
-  @Test(expected = Throwable.class)
+  @Test(expected=Throwable.class)
   public void testThatOverflowThrows() {
-    Source.rangeOf(0, Long.MAX_VALUE + 1);
+    new LongRangeSource(0, Long.MAX_VALUE + 1);
   }
 
   @Test(expected = Throwable.class)
-  public void testThatUnderflowThrows() {
-    Source.rangeOf(-1, Long.MAX_VALUE);
+  public void testThatStartUnderflowThrows() {
+    new LongRangeSource(-1, Long.MAX_VALUE);
   }
 }
