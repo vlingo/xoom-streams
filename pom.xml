@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-streams</artifactId>
-  <version>0.9.3-RC4</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>vlingo-streams</name>
   <url>http://maven.apache.org</url>
