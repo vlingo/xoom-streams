@@ -33,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <vlingo.version>0.9.3-RC4</vlingo.version>
+        <vlingo.version>1.0.0</vlingo.version>
     </properties>
 
     <dependencies>
