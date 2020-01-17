@@ -21,7 +21,7 @@
   </dependencies>
   <modules>
     <module>vlingo-streams-core</module>
-    <module>vlingo-streams-tck</module>
-    <module>vlingo-streams-pipes</module>
+    <!--module>vlingo-streams-tck</module-->
+    <!--module>vlingo-streams-pipes</module -->
   </modules>
 </project>
