@@ -6,7 +6,7 @@
 
     <groupId>io.vlingo</groupId>
     <artifactId>vlingo-streams-tck</artifactId>
-    <version>0.9.3-RC4</version>
+    <version>1.0.0</version>
     <name>vlingo-streams-tck</name>
     <description>Tests for Reactive Streams TCK against vlingo-streams-core.</description>
     <url>https://github.com/vlingo/vlingo-streams</url>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>io.vlingo</groupId>
             <artifactId>vlingo-streams-core</artifactId>
-            <version>0.9.3-RC4</version>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
