@@ -17,7 +17,7 @@ public class LongRangeSource implements Source<Long> {
   public final long startInclusive;
 
   public LongRangeSource(final long startInclusive, final long endExclusive) {
-    assert(startInclusive < endExclusive);
+    assert(startInclusive <= endExclusive);
     assert(startInclusive >= 0 && startInclusive <= Long.MAX_VALUE);
     this.startInclusive = startInclusive;
     assert(endExclusive >= 0 && endExclusive <= Long.MAX_VALUE);
