@@ -13,16 +13,18 @@ import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.tck.PublisherVerification;
 import org.reactivestreams.tck.TestEnvironment;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 import io.vlingo.actors.Definition;
 import io.vlingo.actors.World;
 import io.vlingo.reactivestreams.Streams.OverflowPolicy;
 
 public class StreamPublisherCompatibilityTest extends PublisherVerification<Long> {
-  final World world = World.startWithDefaults("streams");
+  private World world;
 
   public StreamPublisherCompatibilityTest() {
-    super(new TestEnvironment(2000, 2000, 100, true)); // new TestEnvironment(200, 100, 50, true)
+    super(new TestEnvironment(400, 200, 100, true)); // new TestEnvironment(2000, 2000, 100, true)
   }
 
   @Override
@@ -58,6 +60,16 @@ public class StreamPublisherCompatibilityTest extends PublisherVerification<Long
         subscriber.onError(new RuntimeException("Can't subscribe subscriber: " + subscriber + ", because of reasons."));
       }
     };
+  }
+
+  @BeforeMethod
+  public void before() {
+    world = World.startWithDefaults("streams");
+  }
+
+  @AfterMethod
+  public void after() {
+    world.terminate();
   }
 
 //  @Test
@@ -100,6 +112,12 @@ public class StreamPublisherCompatibilityTest extends PublisherVerification<Long
 //  @Override
 //  public void required_spec105_mustSignalOnCompleteWhenFiniteStreamTerminates() throws Throwable {
 //    super.required_spec105_mustSignalOnCompleteWhenFiniteStreamTerminates();
+//  }
+//
+//  @Test
+//  @Override
+//  public void optional_spec105_emptyStreamMustTerminateBySignallingOnComplete() throws Throwable {
+//    super.optional_spec105_emptyStreamMustTerminateBySignallingOnComplete();
 //  }
 //
 //  @Test
