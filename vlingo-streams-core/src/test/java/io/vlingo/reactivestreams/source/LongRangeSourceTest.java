@@ -35,6 +35,23 @@ public class LongRangeSourceTest {
     Assert.assertEquals(10, current);
   }
 
+  @Test
+  public void testThatZeroZeroRangeCompletes() {
+    final Source<Long> range = Source.rangeOf(0, 0);
+
+    range.next().andFinallyConsume(elements -> {
+      System.out.println("E: " + elements.elementsAsString());
+      if (!elements.terminated) {
+        current = elements.values[0];
+        Assert.assertEquals(expected, current);
+      } else {
+        terminated = true;
+      }
+    });
+
+    Assert.assertTrue(terminated);
+  }
+
   @Test(expected=Throwable.class)
   public void testThatOverflowThrows() {
     new LongRangeSource(0, Long.MAX_VALUE + 1);
