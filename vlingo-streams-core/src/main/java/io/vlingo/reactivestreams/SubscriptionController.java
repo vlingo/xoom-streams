@@ -175,7 +175,7 @@ final class SubscriptionController<T> implements Subscription {
 
   long accumulate(final long amount) {
     if (maximum < Long.MAX_VALUE) {
-      long accumulated = maximum + amount;
+      long accumulated = (maximum - count) + amount;
       if (accumulated < 0) {
         accumulated = Long.MAX_VALUE;
       }
