@@ -15,6 +15,8 @@ import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.tck.IdentityProcessorVerification;
 import org.reactivestreams.tck.TestEnvironment;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 import io.vlingo.actors.World;
 import io.vlingo.common.Completes;
@@ -24,7 +26,7 @@ public class StreamProcessorCompatibilityTest extends IdentityProcessorVerificat
   public static final long DEFAULT_TIMEOUT_MILLIS = 300L;
   public static final long PUBLISHER_REFERENCE_CLEANUP_TIMEOUT_MILLIS = 1000L;
 
-  private final World world = World.startWithDefaults("streams");
+  private World world;
 
   public StreamProcessorCompatibilityTest() {
     super(new TestEnvironment(DEFAULT_TIMEOUT_MILLIS), PUBLISHER_REFERENCE_CLEANUP_TIMEOUT_MILLIS);
@@ -66,5 +68,15 @@ public class StreamProcessorCompatibilityTest extends IdentityProcessorVerificat
   @Override
   public long boundedDepthOfOnNextAndRequestRecursion() {
     return super.boundedDepthOfOnNextAndRequestRecursion();
+  }
+
+  @BeforeMethod
+  public void before() {
+    world = World.startWithDefaults("streams");
+  }
+
+  @AfterMethod
+  public void after() {
+    world.terminate();
   }
 }
