@@ -10,12 +10,16 @@ package io.vlingo.reactivestreams;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.tck.SubscriberBlackboxVerification;
 import org.reactivestreams.tck.TestEnvironment;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 import io.vlingo.actors.World;
 import io.vlingo.reactivestreams.sink.NoOpSink;
 
 public class StreamSubscriberCompatibilityTest extends SubscriberBlackboxVerification<Integer> {
-  protected StreamSubscriberCompatibilityTest() {
+  private World world;
+
+  public StreamSubscriberCompatibilityTest() {
     super(new TestEnvironment());
   }
 
@@ -30,5 +34,15 @@ public class StreamSubscriberCompatibilityTest extends SubscriberBlackboxVerific
     final World world = World.startWithDefaults("streams");
     final Sink<Integer> sink = new NoOpSink<>();
     return world.actorFor(Subscriber.class, StreamSubscriber.class, sink, 10);
+  }
+
+  @BeforeMethod
+  public void before() {
+    world = World.startWithDefaults("streams");
+  }
+
+  @AfterMethod
+  public void after() {
+    world.terminate();
   }
 }
