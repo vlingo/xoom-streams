@@ -217,7 +217,12 @@ final class SubscriptionController<T> implements Subscription {
 
   void requestFlow(final long maximum) {
     // System.out.println("REQUEST FLOW: " + maximum);
-    // this.count = 0;
+
+    // NOTE: Since accumulate() works as follows:
+    //    long accumulated = maximum + amount;
+    // it means that resetting count must NOT be done:
+    //    this.count = 0;
+
     this.maximum = maximum;
   }
 
