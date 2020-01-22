@@ -34,6 +34,7 @@ public class Processor__Proxy<T, R> implements org.reactivestreams.Processor<T, 
   }
   @Override
   public void onNext(T arg0) {
+    if (arg0 == null) throw new NullPointerException("Element must not be null.");
     if (!actor.isStopped()) {
       final java.util.function.Consumer<Processor> consumer = (actor) -> actor.onNext(arg0);
       if (mailbox.isPreallocated()) { mailbox.send(actor, Processor.class, consumer, null, onNextRepresentation2); }
