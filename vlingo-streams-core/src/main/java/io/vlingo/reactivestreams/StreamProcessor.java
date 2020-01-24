@@ -200,7 +200,8 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
     void termiante() {
       terminated = true;
 
-      values.clear();
+      // Terminate stops accumulating new values. Already accumulated values can be still consumed by {@link #nextValues()}.
+      // values.clear();
     }
 
     private R[] nextValues() {
