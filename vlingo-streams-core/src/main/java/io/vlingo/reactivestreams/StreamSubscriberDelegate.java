@@ -74,6 +74,10 @@ public class StreamSubscriberDelegate<T> implements Subscriber<T> {
     return completed || errored;
   }
 
+  public void cancelSubscription() {
+    subscription.cancel();
+  }
+
   private void terminate() {
     sink.terminate();
   }
