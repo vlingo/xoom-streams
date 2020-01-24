@@ -55,6 +55,12 @@ public class StreamProcessorCompatibilityTest extends IdentityProcessorVerificat
     return new Publisher<Integer>() {
       @Override
       public void subscribe(Subscriber<? super Integer> s) {
+        // Baffling. This proves nothing about the actual publisher, and shouldn't,
+        // because designing the publisher with some sort of built-in failure
+        // condition would be even more ridiculous than this. And BTW, the
+        // subscriber will always be registered before onError() because there
+        // is no way to signal a subscriber unless it is registered.
+        s.onSubscribe(new SubscriptionController<>(s, null, null));
         s.onError(new RuntimeException("Can't subscribe subscriber: " + s + ", because of reasons."));
       }
     };
