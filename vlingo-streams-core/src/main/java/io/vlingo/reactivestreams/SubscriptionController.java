@@ -191,15 +191,8 @@ final class SubscriptionController<T> implements Subscription {
     this.maximum = 0;
   }
 
-  long count() {
-    if (maximum == Long.MAX_VALUE) {
-      return maximum;
-    }
-    return count;
-  }
-
   void increment() {
-    if (maximum < Long.MAX_VALUE) {
+    if (count < maximum) {
       ++count;
     }
   }
