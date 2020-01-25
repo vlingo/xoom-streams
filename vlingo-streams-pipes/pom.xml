@@ -11,7 +11,7 @@
     <properties>
         <maven.compiler.target>13</maven.compiler.target>
         <maven.compiler.source>13</maven.compiler.source>
-        <vlingo.version>0.9.3-RC4</vlingo.version>
+        <vlingo.version>1.0.0</vlingo.version>
         <jupiter.version>5.5.2</jupiter.version>
     </properties>
 

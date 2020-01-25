@@ -118,6 +118,7 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
 
   @Override
   public void cancel(final SubscriptionController<R> controller) {
+    subscriberDelegate.cancelSubscription();
     publisherDelegate.cancel(controller);
   }
 
@@ -200,7 +201,8 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
     void termiante() {
       terminated = true;
 
-      values.clear();
+      // Terminate stops accumulating new values. Already accumulated values can be still consumed by {@link #nextValues()}.
+      // values.clear();
     }
 
     private R[] nextValues() {
