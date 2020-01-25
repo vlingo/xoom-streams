@@ -118,6 +118,7 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
 
   @Override
   public void cancel(final SubscriptionController<R> controller) {
+    subscriberDelegate.cancelSubscription();
     publisherDelegate.cancel(controller);
   }
 
