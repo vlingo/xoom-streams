@@ -1,12 +1,12 @@
 {
     "package": {
-        "name": "vlingo-streams-core",
+        "name": "vlingo-streams",
         "repo": "vlingo-platform-java",
         "subject": "vlingo",
-        "desc": "Reactive Streams for the vlingo/PLATFORM.",
-        "website_url": "https://github.com/vlingo/vlingo-streams-core",
-        "issue_tracker_url": "https://github.com/vlingo/vlingo-streams-core/issues",
-        "vcs_url": "https://github.com/vlingo/vlingo-streams-core.git",
+        "desc": "The vlingo/PLATFORM Reactive Streams built on vlingo/actors.",
+        "website_url": "https://github.com/vlingo/vlingo-streams",
+        "issue_tracker_url": "https://github.com/vlingo/vlingo-streams/issues",
+        "vcs_url": "https://github.com/vlingo/vlingo-streams.git",
         "licenses": ["MPL-2.0"],
         "public_download_numbers": true,
         "public_stats": true
