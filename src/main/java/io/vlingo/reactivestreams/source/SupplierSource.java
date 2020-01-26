@@ -13,6 +13,11 @@ import io.vlingo.common.Completes;
 import io.vlingo.reactivestreams.Elements;
 import io.vlingo.reactivestreams.Source;
 
+/**
+ * A Source that uses a {@code Supplier<T>} to provide next {@code Element<T>} instances.
+ *
+ * @param <T> the T type of Element being supplied
+ */
 public class SupplierSource<T> implements Source<T> {
   private final boolean slowSupplier;
   private final Supplier<T> supplier;
@@ -37,7 +42,17 @@ public class SupplierSource<T> implements Source<T> {
   }
 
   @Override
+  public Completes<Elements<T>> next(final int maximumElements) {
+    return next();
+  }
+
+  @Override
   public Completes<Elements<T>> next(final long index) {
+    return next();
+  }
+
+  @Override
+  public Completes<Elements<T>> next(final long index, final int maximumElements) {
     return next();
   }
 

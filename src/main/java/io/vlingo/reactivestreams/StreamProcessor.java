@@ -174,6 +174,11 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
 
     @Override
     public Completes<Elements<R>> next() {
+      return next((int) requestThreshold);
+    }
+
+    @Override
+    public Completes<Elements<R>> next(final int maximumElements) {
       if (values.isEmpty()) {
         if (subscriberDelegate.isFinalized() || terminated) {
           return Completes.withSuccess(Elements.terminated());
@@ -181,12 +186,17 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
         return Completes.withSuccess(Elements.empty());
       }
 
-      return Completes.withSuccess(Elements.of(nextValues()));
+      return Completes.withSuccess(Elements.of(nextValues(maximumElements)));
     }
 
     @Override
     public Completes<Elements<R>> next(final long index) {
-      return next();
+      return next((int) requestThreshold);
+    }
+
+    @Override
+    public Completes<Elements<R>> next(final long index, final int maximumElements) {
+      return next(maximumElements);
     }
 
     @Override
@@ -205,8 +215,8 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
       // values.clear();
     }
 
-    private R[] nextValues() {
-      final long elements = Math.min(values.size(), requestThreshold);
+    private R[] nextValues(final long maximum) {
+      final long elements = Math.min(values.size(), maximum);
       @SuppressWarnings("unchecked")
       final R[] nextValues = (R[]) new Object[(int) elements];
       for (int idx = 0; idx < nextValues.length; ++idx) {

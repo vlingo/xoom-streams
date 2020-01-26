@@ -37,7 +37,17 @@ public class LongRangeSource implements Source<Long> {
   }
 
   @Override
+  public Completes<Elements<Long>> next(final int maximumElements) {
+    return next();
+  }
+
+  @Override
   public Completes<Elements<Long>> next(long index) {
+    return next();
+  }
+
+  @Override
+  public Completes<Elements<Long>> next(final long index, final int maximumElements) {
     return next();
   }
 

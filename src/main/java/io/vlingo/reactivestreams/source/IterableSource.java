@@ -34,7 +34,17 @@ public class IterableSource<T> implements Source<T> {
   }
 
   @Override
+  public Completes<Elements<T>> next(final int maximumElements) {
+    return next();
+  }
+
+  @Override
   public Completes<Elements<T>> next(final long index) {
+    return next();
+  }
+
+  @Override
+  public Completes<Elements<T>> next(final long index, final int maximumElements) {
     return next();
   }
 

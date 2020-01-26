@@ -41,7 +41,17 @@ public class RandomNumberOfElementsSource implements Source<String> {
   }
 
   @Override
+  public Completes<Elements<String>> next(final int maximumElements) {
+    return next();
+  }
+
+  @Override
   public Completes<Elements<String>> next(final long index) {
+    return next();
+  }
+
+  @Override
+  public Completes<Elements<String>> next(final long index, final int maximumElements) {
     return next();
   }
 
