@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
-  <artifactId>vlingo-streams-core</artifactId>
+  <artifactId>vlingo-streams</artifactId>
   <version>1.0.0</version>
-  <name>vlingo-streams-core</name>
+  <name>vlingo-streams</name>
   <description>Reactive Streams for the vlingo/PLATFORM.</description>
   <url>https://github.com/vlingo/vlingo-streams</url>
   <licenses>
