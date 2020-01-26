@@ -171,6 +171,15 @@ public interface Source<T> {
   Completes<Elements<T>> next();
 
   /**
+   * Answers the next {@code maximumElements} as a {@code Completes<Elements<T>>}, which has a
+   * zero length {@code values} when the next element is not <strong>immediately</strong> available.
+   * Answering the zero length {@code Completes<Elements<T>>.value} is to prevent blocking.
+   * @param maximumElements the int maximum number of elements to answer
+   * @return {@code Completes<Elements<T>>}
+   */
+  Completes<Elements<T>> next(final int maximumElements);
+
+  /**
    * Answers the next element(s) starting at {@code index} as a {@code Completes<Elements<T>>},
    * which has a zero length {@code values} when at least the indexed element is not
    * <strong>immediately</strong> available. Answering the zero length {@code Completes<Elements<T>>.value}
@@ -179,10 +188,25 @@ public interface Source<T> {
    * It is recommended to use this method only when the elements are actually
    * identified by indexes, such as with an ordered collection or log.
    *
-   * @param index the int index of the element at which to start
+   * @param index the long index of the element at which to start
    * @return {@code Completes<Elements<T>>}
    */
   Completes<Elements<T>> next(final long index);
+
+  /**
+   * Answers the next {@code maximumElements} starting at {@code index} as a {@code Completes<Elements<T>>},
+   * which has a zero length {@code values} when at least the indexed element is not
+   * <strong>immediately</strong> available. Answering the zero length {@code Completes<Elements<T>>.value}
+   * is to prevent blocking.
+   * <p>
+   * It is recommended to use this method only when the elements are actually
+   * identified by indexes, such as with an ordered collection or log.
+   *
+   * @param index the long index of the element at which to start
+   * @param maximumElements the int maximum number of elements to answer
+   * @return {@code Completes<Elements<T>>}
+   */
+  Completes<Elements<T>> next(final long index, final int maximumElements);
 
   /**
    * Answers whether or not the concrete {@code Source} is subject to
