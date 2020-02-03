@@ -4,6 +4,7 @@ import io.vlingo.actors.Actor;
 import io.vlingo.actors.DeadLetter;
 import io.vlingo.actors.LocalMessage;
 import io.vlingo.actors.Mailbox;
+import io.vlingo.common.SerializableConsumer;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Subscriber__Proxy<T> implements org.reactivestreams.Subscriber<T> {
@@ -25,7 +26,7 @@ public class Subscriber__Proxy<T> implements org.reactivestreams.Subscriber<T> {
   public void onSubscribe(org.reactivestreams.Subscription arg0) {
     if (arg0 == null) throw new NullPointerException("Subscription must not be null.");
     if (!actor.isStopped()) {
-      final java.util.function.Consumer<Subscriber> consumer = (actor) -> actor.onSubscribe(arg0);
+      final SerializableConsumer<Subscriber> consumer = (actor) -> actor.onSubscribe(arg0);
       if (mailbox.isPreallocated()) { mailbox.send(actor, Subscriber.class, consumer, null, onSubscribeRepresentation1); }
       else { mailbox.send(new LocalMessage<Subscriber>(actor, Subscriber.class, consumer, onSubscribeRepresentation1)); }
     } else {
@@ -35,7 +36,7 @@ public class Subscriber__Proxy<T> implements org.reactivestreams.Subscriber<T> {
   @Override
   public void onComplete() {
     if (!actor.isStopped()) {
-      final java.util.function.Consumer<Subscriber> consumer = (actor) -> actor.onComplete();
+      final SerializableConsumer<Subscriber> consumer = (actor) -> actor.onComplete();
       if (mailbox.isPreallocated()) { mailbox.send(actor, Subscriber.class, consumer, null, onCompleteRepresentation2); }
       else { mailbox.send(new LocalMessage<Subscriber>(actor, Subscriber.class, consumer, onCompleteRepresentation2)); }
     } else {
@@ -46,7 +47,7 @@ public class Subscriber__Proxy<T> implements org.reactivestreams.Subscriber<T> {
   public void onError(java.lang.Throwable arg0) {
     if (arg0 == null) throw new NullPointerException("Exception must not be null.");
     if (!actor.isStopped()) {
-      final java.util.function.Consumer<Subscriber> consumer = (actor) -> actor.onError(arg0);
+      final SerializableConsumer<Subscriber> consumer = (actor) -> actor.onError(arg0);
       if (mailbox.isPreallocated()) { mailbox.send(actor, Subscriber.class, consumer, null, onErrorRepresentation3); }
       else { mailbox.send(new LocalMessage<Subscriber>(actor, Subscriber.class, consumer, onErrorRepresentation3)); }
     } else {
@@ -57,7 +58,7 @@ public class Subscriber__Proxy<T> implements org.reactivestreams.Subscriber<T> {
   public void onNext(T arg0) {
     if (arg0 == null) throw new NullPointerException("Element must not be null.");
     if (!actor.isStopped()) {
-      final java.util.function.Consumer<Subscriber> consumer = (actor) -> actor.onNext(arg0);
+      final SerializableConsumer<Subscriber> consumer = (actor) -> actor.onNext(arg0);
       if (mailbox.isPreallocated()) { mailbox.send(actor, Subscriber.class, consumer, null, onNextRepresentation4); }
       else { mailbox.send(new LocalMessage<Subscriber>(actor, Subscriber.class, consumer, onNextRepresentation4)); }
     } else {

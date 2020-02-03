@@ -4,6 +4,7 @@ import io.vlingo.actors.Actor;
 import io.vlingo.actors.DeadLetter;
 import io.vlingo.actors.LocalMessage;
 import io.vlingo.actors.Mailbox;
+import io.vlingo.common.SerializableConsumer;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Publisher__Proxy<T> implements org.reactivestreams.Publisher<T> {
@@ -22,7 +23,7 @@ public class Publisher__Proxy<T> implements org.reactivestreams.Publisher<T> {
   public void subscribe(org.reactivestreams.Subscriber<? super T> arg0) {
     if (arg0 == null) throw new NullPointerException("Subscriber must not be null.");
     if (!actor.isStopped()) {
-      final java.util.function.Consumer<Publisher> consumer = (actor) -> actor.subscribe(arg0);
+      final SerializableConsumer<Publisher> consumer = (actor) -> actor.subscribe(arg0);
       if (mailbox.isPreallocated()) { mailbox.send(actor, Publisher.class, consumer, null, subscribeRepresentation1); }
       else { mailbox.send(new LocalMessage<Publisher>(actor, Publisher.class, consumer, subscribeRepresentation1)); }
     } else {
