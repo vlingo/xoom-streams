@@ -17,6 +17,7 @@ import io.vlingo.common.Completes;
  *
  * @see StreamTransformer
  */
+@FunctionalInterface
 public interface Transformer<T,R> {
   /**
    * Answer the {@code Completes<R>} value after transforming it from the {@code value} of type {@code T}.
