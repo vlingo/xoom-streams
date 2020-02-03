@@ -22,8 +22,8 @@ import io.vlingo.common.Scheduled;
 import io.vlingo.reactivestreams.sink.ConsumerSink;
 
 /**
- * A {@code Processor<T,R>} implementation, where as a {@code Subscriber<T>} I consumes from an
- * upstream {@code Publisher<T>}, transform those signals using {@code Transformer<T,R>},
+ * A {@code Processor<T,R>} implementation, where as a {@code Subscriber<T>} I consume from an
+ * upstream {@code Publisher<T>}, perform an operation on those signals using {@code Operator<T,R>},
  * and emit new signals via my own {@code Publisher<R>}.
  * <p>
  * My instances reuse {@code StreamSubscriberDelegate<T>} and {@code StreamPublisherDelegate<R>}.
@@ -39,17 +39,17 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
 
   /**
    * Construct my default state with {@code transformer}, {@code requestThreshold}, and {@code configuration}.
-   * @param transformer the {@code Transformer<T,R>} that transforms an instance of T to an instance of R
+   * @param operator the {@code Operator<T,R>} that performs on an instance of T to yield an instance of R
    * @param requestThreshold the long number of signals accepted by my subscription
    * @param configuration the PublisherConfiguration used by my publisher
    */
   @SuppressWarnings("unchecked")
   public StreamProcessor(
-          final Transformer<T,R> transformer,
+          final Operator<T,R> operator,
           final long requestThreshold,
           final PublisherConfiguration configuration) {
     this.requestThreshold = requestThreshold;
-    this.subscriberDelegate = new StreamSubscriberDelegate<>(new ConsumerSink<>(new ConsumerTransformer(transformer)), requestThreshold, logger());
+    this.subscriberDelegate = new StreamSubscriberDelegate<>(new ConsumerSink<>(new ConsumerOperator(operator)), requestThreshold, logger());
     this.publisherSource = new PublisherSource();
     this.publisherDelegate = new StreamPublisherDelegate<>(publisherSource, configuration, selfAs(ControlledSubscription.class), scheduler(), selfAs(Scheduled.class), selfAs(Stoppable.class));
   }
@@ -142,17 +142,17 @@ public class StreamProcessor<T,R> extends Actor implements Processor<T,R>, Contr
   // ConsumerTransformer
   //===================================
 
-  private class ConsumerTransformer implements Consumer<T> {
-    private final Transformer<T,R> transformer;
+  private class ConsumerOperator implements Consumer<T> {
+    private final Operator<T,R> operator;
 
-    ConsumerTransformer(final Transformer<T,R> transformer) {
-      this.transformer = transformer;
+    ConsumerOperator(final Operator<T,R> operator) {
+      this.operator = operator;
     }
 
     @Override
     public void accept(final T value) {
       try {
-        transformer.transform(value).andFinallyConsume(transformed -> publisherSource.enqueue(transformed));
+        operator.performInto(value, (transformed) -> publisherSource.enqueue(transformed));
       } catch (Exception e) {
         publisherDelegate.publish(e);
       }
