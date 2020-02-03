@@ -20,7 +20,7 @@ import io.vlingo.actors.testkit.AccessSafely;
 @SuppressWarnings("unchecked")
 public class StreamProcessorTest extends StreamPubSubTest {
   private SafeConsumerSink<Integer> sink;
-  private StringToIntegerTransformer transformer;
+  private StringToIntegerMapper transformer;
 
   @Test
   public void testThatProcessorPipesTransformation() {
@@ -80,7 +80,7 @@ public class StreamProcessorTest extends StreamPubSubTest {
   @Override
   @Before
   public void setUp() {
-    transformer = new StringToIntegerTransformer();
+    transformer = new StringToIntegerMapper();
     sink = new SafeConsumerSink<>();
 
     super.setUp();
