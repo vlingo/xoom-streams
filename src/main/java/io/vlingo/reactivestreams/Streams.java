@@ -59,7 +59,7 @@ public class Streams {
    * @param logger Logger
    */
   public static void logger(final Logger logger) {
-    if (logger != null) {
+    if (Streams.logger != null) {
       throw new IllegalStateException("Logger is already set.");
     }
     Streams.logger = logger;
