@@ -32,19 +32,4 @@ public class FilterTest {
     Assert.assertEquals("123", results.get(1));
     Assert.assertEquals("214", results.get(2));
   }
-
-  @Test
-  public void testThatMapperMaps() {
-    final Operator<String,Integer> mapper = Operator.mapWith((s) -> Integer.parseInt(s));
-
-    final List<Integer> results = new ArrayList<>();
-
-    Arrays.asList("123", "456", "789")
-      .forEach(digits -> mapper.performInto(digits, (number) -> results.add(number)));
-
-    Assert.assertEquals(3, results.size());
-    Assert.assertEquals(123, (int) results.get(0));
-    Assert.assertEquals(456, (int) results.get(1));
-    Assert.assertEquals(789, (int) results.get(2));
-  }
 }
