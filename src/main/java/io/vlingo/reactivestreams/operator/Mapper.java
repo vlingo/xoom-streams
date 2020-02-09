@@ -30,7 +30,7 @@ public class Mapper<T,R> implements Operator<T,R> {
     try {
       consumer.accept(mapper.apply(value));
     } catch (Exception e) {
-      Streams.logger().error("Filter failed because: " + e.getMessage(), e);
+      Streams.logger().error("Mapper failed because: " + e.getMessage(), e);
     }
   }
 }
