@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import io.vlingo.reactivestreams.operator.Filter;
+import io.vlingo.reactivestreams.operator.FlatMapper;
 import io.vlingo.reactivestreams.operator.Mapper;
 
 /**
@@ -41,6 +42,18 @@ public interface Operator<T,R> {
    */
   static <T,R> Operator<T,R> mapWith(final Function<T,R> mapper) {
     return new Mapper<>(mapper);
+  }
+
+  /**
+   * Answers a new {@code Operator<T,R>} that maps from values of {@code T} to values of
+   * {@code Source<R>}, sending each value of the {@code Source<R>} to the next consumer.
+   * @param mapper the function that will be mapping each value.
+   * @param <T> the type of values to map from
+   * @param <R> the type of values to map to
+   * @return {@code Operator<T,R>}
+   */
+  static <T,R> Operator<T,R> flatMapWith(final Function<T, Source<R>> mapper) {
+    return new FlatMapper<>(mapper);
   }
 
   /**
