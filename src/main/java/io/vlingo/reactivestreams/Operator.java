@@ -12,7 +12,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import io.vlingo.reactivestreams.operator.Filter;
-import io.vlingo.reactivestreams.operator.FlatMapper;
 import io.vlingo.reactivestreams.operator.Mapper;
 
 /**
@@ -30,18 +29,6 @@ public interface Operator<T,R> {
    */
   static <T> Operator<T,T> filterWith(final Predicate<T> filter) {
     return new Filter<>(filter);
-  }
-
-  /**
-   * Answer a new {@code Operator<T,R>} that flat maps from values of {@code T}
-   * to values of {@code R} by means of the {@code mapper}.
-   * @param mapper the {@code Function<T,R>} that maps from values of T to values of R
-   * @param <T> the type of values to mapped from
-   * @param <R> the type of values mapped to
-   * @return {@code Operator<T,R>}
-   */
-  static <T,R> Operator<T,R> flatMapWith(final Function<T,R> mapper) {
-    return new FlatMapper<>(mapper);
   }
 
   /**
