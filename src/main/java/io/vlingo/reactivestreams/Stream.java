@@ -11,6 +11,12 @@ public interface Stream {
   /** The default interval to poll the {@code Source}. */
   public static final int DefaultProbeInterval = PublisherConfiguration.DefaultProbeInterval;
 
+  /** The fast interval to poll the {@code Source}. */
+  public static int FastProbeInterval = PublisherConfiguration.FastProbeInterval;
+
+  /** The fastest interval to poll the {@code Source}. */
+  public static int FastestProbeInterval = PublisherConfiguration.FastestProbeInterval;
+
   /**
    * Potentially changes the underlying {@code Subscriber}'s {@code flowElementsRate}
    * if its current is not equal to the {@code flowElementsRate}.
