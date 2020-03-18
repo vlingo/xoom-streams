@@ -9,6 +9,7 @@ package io.vlingo.reactivestreams;
 
 import java.util.List;
 
+import io.vlingo.reactivestreams.sink.test.SafeConsumerSink;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
