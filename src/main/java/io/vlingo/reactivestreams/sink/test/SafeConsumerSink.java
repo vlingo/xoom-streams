@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.reactivestreams;
+package io.vlingo.reactivestreams.sink.test;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import io.vlingo.actors.testkit.AccessSafely;
+import io.vlingo.reactivestreams.Sink;
 
 public class SafeConsumerSink<T> implements Sink<T>, Consumer<T> {
   private AccessSafely access = afterCompleting(0);
