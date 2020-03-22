@@ -12,25 +12,6 @@
       <url>https://mozilla.org/MPL/2.0/</url>
     </license>
   </licenses>
-  <developers>
-    <developer>
-      <name>Vaughn Vernon</name>
-      <email>vaughn@kalele.io</email>
-      <organization>Kalele</organization>
-      <organizationUrl>http://kalele.io</organizationUrl>
-      <url>https://github.com/VaughnVernon</url>
-    </developer>
-    <developer>
-      <name>Kevin Mas Ruiz</name>
-      <email>Masruizkevin@gmail.com</email>
-      <url>https://kmruiz.github.io/</url>
-    </developer>
-    <developer>
-      <name>Petru Flueras</name>
-      <email>petru.flueras@gmail.com</email>
-      <url>https://github.com/pflueras</url>
-    </developer>
-  </developers>
   <scm>
     <connection>scm:git:git://github.com/vlingo/vlingo-streams.git</connection>
     <developerConnection>scm:git:ssh://github.com/vlingo/vlingo-streams.git</developerConnection>
@@ -100,6 +81,11 @@
       <artifactId>logback-classic</artifactId>
       <version>1.0.13</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vlingo</groupId>
+      <artifactId>vlingo-common</artifactId>
+      <version>1.2.9</version>
     </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
