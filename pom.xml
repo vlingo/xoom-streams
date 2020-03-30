@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-streams</artifactId>
-  <version>1.2.9</version>
+  <version>1.2.10-SNAPSHOT</version>
   <name>vlingo-streams</name>
   <description>Reactive Streams for the vlingo/PLATFORM.</description>
   <url>https://github.com/vlingo/vlingo-streams</url>
