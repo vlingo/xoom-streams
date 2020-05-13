@@ -24,7 +24,6 @@ public class TerminalOperationConsumerSink<T,O> extends ConsumerSink<T> {
   public void terminate() {
     super.terminate();
 
-    System.out.println("TERMINATING STREAM: " + terminalValue);
     terminalOperation.accept(terminalValue);
   }
 }
