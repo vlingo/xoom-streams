@@ -2,8 +2,9 @@
 
 [![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-streams) [![Build Status](https://travis-ci.org/vlingo/vlingo-streams.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-streams) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-streams/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-streams/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
 
+Docs: https://docs.vlingo.io/vlingo-streams
 
-The vlingo/PLATFORM Reactive Streams built on vlingo/actors.
+The VLINGO/PLATFORM Reactive Streams built on VLINGO/ACTORS.
 
 ### Bintray
 
@@ -18,7 +19,7 @@ The vlingo/PLATFORM Reactive Streams built on vlingo/actors.
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-streams</artifactId>
-      <version>1.2.9</version>
+      <version>1.3.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -26,7 +27,7 @@ The vlingo/PLATFORM Reactive Streams built on vlingo/actors.
 
 ```gradle
 dependencies {
-    compile 'io.vlingo:vlingo-streams:1.2.9'
+    compile 'io.vlingo:vlingo-streams:1.3.0'
 }
 
 repositories {
