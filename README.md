@@ -19,7 +19,7 @@ The VLINGO/PLATFORM Reactive Streams built on VLINGO/ACTORS.
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-streams</artifactId>
-      <version>1.3.0</version>
+      <version>1.5.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -27,7 +27,7 @@ The VLINGO/PLATFORM Reactive Streams built on VLINGO/ACTORS.
 
 ```gradle
 dependencies {
-    compile 'io.vlingo:vlingo-streams:1.3.0'
+    compile 'io.vlingo:vlingo-streams:1.5.0'
 }
 
 repositories {
