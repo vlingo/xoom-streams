@@ -2,9 +2,12 @@
 
 [![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-streams) [![Build](https://github.com/vlingo/vlingo-streams/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-streams/actions?query=workflow%3ABuild) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-streams/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-streams/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
 
+The VLINGO XOOM platform SDK for Reactive Streams built on XOOM ACTORS.
+
 Docs: https://docs.vlingo.io/vlingo-streams
 
-The VLINGO/PLATFORM Reactive Streams built on VLINGO/ACTORS.
+### Important
+If using snapshot builds [follow these instructions](https://github.com/vlingo/vlingo-platform#snapshots-repository) or you will experience failures.
 
 ### Bintray
 
