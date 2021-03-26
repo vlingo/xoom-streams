@@ -1,6 +1,6 @@
 # vlingo-streams
 
-[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-streams) [![Build](https://github.com/vlingo/vlingo-streams/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-streams/actions?query=workflow%3ABuild) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-streams/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-streams/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
+[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-streams) [![Build](https://github.com/vlingo/vlingo-streams/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-streams/actions?query=workflow%3ABuild) [![Download](https://img.shields.io/maven-central/v/io.vlingo/vlingo-streams?label=maven)](https://search.maven.org/artifact/io.vlingo/vlingo-streams) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
 
 The VLINGO XOOM platform SDK for Reactive Streams built on XOOM ACTORS.
 
