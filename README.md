@@ -1,18 +1,18 @@
-# vlingo-streams
+# xoom-streams
 
-[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-streams) [![Build](https://github.com/vlingo/vlingo-streams/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-streams/actions?query=workflow%3ABuild) [![Download](https://img.shields.io/maven-central/v/io.vlingo/vlingo-streams?label=maven)](https://search.maven.org/artifact/io.vlingo/vlingo-streams) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
+[![Javadocs](http://javadoc.io/badge/io.vlingo.xoom/xoom-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo.xoom/xoom-streams) [![Build](https://github.com/vlingo/xoom-streams/workflows/Build/badge.svg)](https://github.com/vlingo/xoom-streams/actions?query=workflow%3ABuild) [![Download](https://img.shields.io/maven-central/v/io.vlingo.xoom/xoom-streams?label=maven)](https://search.maven.org/artifact/io.vlingo.xoom/xoom-streams) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
 
 The VLINGO XOOM platform SDK for Reactive Streams built on XOOM ACTORS.
 
-Docs: https://docs.vlingo.io/vlingo-streams
+Docs: https://docs.vlingo.io/xoom-streams
 
 ### Installationt
 
 ```xml
   <dependencies>
     <dependency>
-      <groupId>io.vlingo</groupId>
-      <artifactId>vlingo-streams</artifactId>
+      <groupId>io.vlingo.xoom</groupId>
+      <artifactId>xoom-streams</artifactId>
       <version>1.6.0</version>
       <scope>compile</scope>
     </dependency>
@@ -21,7 +21,7 @@ Docs: https://docs.vlingo.io/vlingo-streams
 
 ```gradle
 dependencies {
-    compile 'io.vlingo:vlingo-streams:1.6.0'
+    compile 'io.vlingo.xoom:xoom-streams:1.6.0'
 }
 ```
 
