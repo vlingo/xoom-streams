@@ -4,7 +4,7 @@
   <artifactId>xoom-streams</artifactId>
   <version>1.6.1-SNAPSHOT</version>
   <name>xoom-streams</name>
-  <description>Reactive Streams for the vlingo/PLATFORM.</description>
+  <description>Reactive Streams for the VLINGO XOOM Platform.</description>
   <url>https://github.com/vlingo/xoom-streams</url>
   <licenses>
     <license>
@@ -15,7 +15,7 @@
   <developers>
     <developer>
       <id>vlingo</id>
-      <name>vlingo/PLATFORM Team</name>
+      <name>VLINGO XOOM Team</name>
       <email>info@vlingo.io</email>
       <organization>vlingo</organization>
       <organizationUrl>https://vlingo.io/contributors/</organizationUrl>
