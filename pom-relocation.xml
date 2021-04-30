@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-streams</artifactId>
-  <version>1.7.5</version>
+  <version>1.7.6-SNAPSHOT</version>
   <name>vlingo-streams</name>
   <description>Reactive Streams for the VLINGO XOOM Platform.</description>
   <url>https://github.com/vlingo/xoom-streams</url>
