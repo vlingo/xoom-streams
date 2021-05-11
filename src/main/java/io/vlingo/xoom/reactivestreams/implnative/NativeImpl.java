@@ -14,20 +14,20 @@ import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.reactivestreams.Publisher;
 
 public final class NativeImpl {
-    @CEntryPoint(name = "Java_io_vlingo_xoom_reactivestreamsnative_Native_start")
-    public static int start(@CEntryPoint.IsolateThreadContext long isolateId, CCharPointer name) {
-        final String nameString = CTypeConversion.toJavaString(name);
-        World world = World.startWithDefaults(nameString);
+  @CEntryPoint(name = "Java_io_vlingo_xoom_reactivestreamsnative_Native_start")
+  public static int start(@CEntryPoint.IsolateThreadContext long isolateId, CCharPointer name) {
+    final String nameString = CTypeConversion.toJavaString(name);
+    World world = World.startWithDefaults(nameString);
 
-        PublisherConfiguration configuration = new PublisherConfiguration(5, OverflowPolicy.DropHead);
+    PublisherConfiguration configuration = new PublisherConfiguration(5, OverflowPolicy.DropHead);
 
-        final Definition definition = Definition.has(StreamPublisher.class, Definition.parameters(Source.only("1", "2", "3"), configuration));
+    final Definition definition = Definition.has(StreamPublisher.class, Definition.parameters(Source.only("1", "2", "3"), configuration));
 
-        final Protocols protocols = world.actorFor(new Class[]{Publisher.class, ControlledSubscription.class}, definition);
+    final Protocols protocols = world.actorFor(new Class[]{Publisher.class, ControlledSubscription.class}, definition);
 
-        Publisher<String> publisher = protocols.get(0);
+    Publisher<String> publisher = protocols.get(0);
 
-        ControlledSubscription<String> controlledSubscription = protocols.get(1);
-        return 0;
-    }
+    ControlledSubscription<String> controlledSubscription = protocols.get(1);
+    return 0;
+  }
 }
