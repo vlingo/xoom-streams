@@ -1,4 +1,4 @@
-package io.vlingo.xoom.reactivestreams.implnative;
+package io.vlingo.xoom.reactivestreams.nativebuild;
 
 import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.actors.Protocols;
