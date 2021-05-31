@@ -1,10 +1,10 @@
 package org.reactivestreams;
 
-import io.vlingo.actors.Actor;
-import io.vlingo.actors.DeadLetter;
-import io.vlingo.actors.LocalMessage;
-import io.vlingo.actors.Mailbox;
-import io.vlingo.common.SerializableConsumer;
+import io.vlingo.xoom.actors.Actor;
+import io.vlingo.xoom.actors.DeadLetter;
+import io.vlingo.xoom.actors.LocalMessage;
+import io.vlingo.xoom.actors.Mailbox;
+import io.vlingo.xoom.common.SerializableConsumer;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Subscriber__Proxy<T> implements org.reactivestreams.Subscriber<T> {

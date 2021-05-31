@@ -1,24 +1,19 @@
-# vlingo-streams
+# xoom-streams
 
-[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-streams) [![Build Status](https://travis-ci.org/vlingo/vlingo-streams.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-streams) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-streams/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-streams/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
+[![Javadocs](http://javadoc.io/badge/io.vlingo.xoom/xoom-streams.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo.xoom/xoom-streams) [![Build](https://github.com/vlingo/xoom-streams/workflows/Build/badge.svg)](https://github.com/vlingo/xoom-streams/actions?query=workflow%3ABuild) [![Download](https://img.shields.io/maven-central/v/io.vlingo.xoom/xoom-streams?label=maven)](https://search.maven.org/artifact/io.vlingo.xoom/xoom-streams) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/streams)
 
+The VLINGO XOOM platform SDK for Reactive Streams built on XOOM ACTORS.
 
-The vlingo/PLATFORM Reactive Streams built on vlingo/actors.
+Docs: https://docs.vlingo.io/xoom-streams
 
-### Bintray
+### Installationt
 
 ```xml
-  <repositories>
-    <repository>
-      <id>jcenter</id>
-      <url>https://jcenter.bintray.com/</url>
-    </repository>
-  </repositories>
   <dependencies>
     <dependency>
-      <groupId>io.vlingo</groupId>
-      <artifactId>vlingo-streams</artifactId>
-      <version>1.1.0</version>
+      <groupId>io.vlingo.xoom</groupId>
+      <artifactId>xoom-streams</artifactId>
+      <version>1.7.7</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -26,17 +21,13 @@ The vlingo/PLATFORM Reactive Streams built on vlingo/actors.
 
 ```gradle
 dependencies {
-    compile 'io.vlingo:vlingo-streams:1.1.0'
-}
-
-repositories {
-    jcenter()
+    compile 'io.vlingo.xoom:xoom-streams:1.7.7'
 }
 ```
 
 License (See LICENSE file for full license)
 -------------------------------------------
-Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+Copyright © 2012-2021 VLINGO LABS. All rights reserved.
 
 This Source Code Form is subject to the terms of the
 Mozilla Public License, v. 2.0. If a copy of the MPL
