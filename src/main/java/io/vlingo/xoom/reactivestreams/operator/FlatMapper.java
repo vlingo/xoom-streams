@@ -1,20 +1,20 @@
-// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+// Copyright © 2012-2021 VLINGO LABS. All rights reserved.
 //
 // This Source Code Form is subject to the terms of the
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.reactivestreams.operator;
-
-import io.vlingo.reactivestreams.Operator;
-import io.vlingo.reactivestreams.Source;
-import io.vlingo.reactivestreams.Streams;
+package io.vlingo.xoom.reactivestreams.operator;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class FlatMapper<T,R> implements Operator<T,R> {
+import io.vlingo.xoom.reactivestreams.Operator;
+import io.vlingo.xoom.reactivestreams.Source;
+import io.vlingo.xoom.reactivestreams.Streams;
+
+public class FlatMapper<T, R> implements Operator<T,R> {
     private final Function<T, Source<R>> mapper;
     private final static int MAXIMUM_BUFFER = 32;
 
