@@ -1,5 +1,10 @@
 package nativebuild;
 
+import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CCharPointer;
+import org.graalvm.nativeimage.c.type.CTypeConversion;
+import org.reactivestreams.Publisher;
+
 import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.actors.Protocols;
 import io.vlingo.xoom.actors.World;
@@ -8,12 +13,10 @@ import io.vlingo.xoom.reactivestreams.PublisherConfiguration;
 import io.vlingo.xoom.reactivestreams.Source;
 import io.vlingo.xoom.reactivestreams.StreamPublisher;
 import io.vlingo.xoom.reactivestreams.Streams.OverflowPolicy;
-import org.graalvm.nativeimage.c.function.CEntryPoint;
-import org.graalvm.nativeimage.c.type.CCharPointer;
-import org.graalvm.nativeimage.c.type.CTypeConversion;
-import org.reactivestreams.Publisher;
 
 public final class NativeBuildEntryPoint {
+
+  @SuppressWarnings("unused")
   @CEntryPoint(name = "Java_io_vlingo_xoom_reactivestreamsnative_Native_start")
   public static int start(@CEntryPoint.IsolateThreadContext long isolateId, CCharPointer name) {
     final String nameString = CTypeConversion.toJavaString(name);
