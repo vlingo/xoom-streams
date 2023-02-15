@@ -13,7 +13,7 @@ Docs: https://docs.vlingo.io/xoom-streams
     <dependency>
       <groupId>io.vlingo.xoom</groupId>
       <artifactId>xoom-streams</artifactId>
-      <version>1.11.0</version>
+      <version>1.11.1</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -21,7 +21,7 @@ Docs: https://docs.vlingo.io/xoom-streams
 
 ```gradle
 dependencies {
-    compile 'io.vlingo.xoom:xoom-streams:1.11.0'
+    compile 'io.vlingo.xoom:xoom-streams:1.11.1'
 }
 ```
 
